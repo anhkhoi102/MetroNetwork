@@ -66,9 +66,10 @@ struct BalanceTests {
 }
 
 /// Plays a mode with the auto player until it ends (or `maxWeeks`).
-func autoPlay(mode: SessionMode, maxWeeks: Int = 16) -> GameEngine {
+func autoPlay(mode: SessionMode, maxWeeks: Int = 16, thinkInterval: Double = 2) -> GameEngine {
     let engine = GameSessionManager.newSession(mode: mode)!
     var player = AutoPlayer()
+    player.thinkInterval = thinkInterval
     let cap = Double(maxWeeks) * engine.state.config.weekLength
     while !engine.state.isOver, engine.state.elapsed < cap {
         player.act(on: engine)
@@ -108,7 +109,27 @@ struct ScenarioBalanceTests {
             if CampaignManager.levels.prefix(3).contains(where: { $0.id == s.id }) {
                 #expect(r.passed, "\(s.id) should be passable by a casual player")
             }
+            // Players found the extra stars out of reach: a steady player should earn two on the first six levels.
+            if CampaignManager.levels.prefix(6).contains(where: { $0.id == s.id }) {
+                #expect(r.stars >= 2, "\(s.id): the casual player should earn at least two stars")
+            }
         }
         print("Scenarios (auto player):\n" + lines.map { "  " + $0 }.joined(separator: "\n"))
+    }
+
+    /// "Have N stations on lines" must leave slack: the map has to have spawned comfortably more than N stations
+    /// by the end, so the player never has to connect a station that appeared seconds before the level ends.
+    @Test func stationTargetsAreReachable() {
+        for s in CampaignManager.levels {
+            for case .connectedStations(let n) in s.objectives {
+                let e = GameSessionManager.newSession(mode: .scenario(s.id)) { $0.overcrowdTime = 1e12 }!
+                var player = AutoPlayer()
+                while !e.state.isOver {
+                    player.act(on: e)
+                    e.update(realDelta: e.state.config.simulationStep * 3)
+                }
+                #expect(n <= e.state.stations.count - 2, "\(s.id) asks for \(n) of \(e.state.stations.count) stations")
+            }
+        }
     }
 }

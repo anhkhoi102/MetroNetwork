@@ -41,7 +41,7 @@ public enum CampaignManager {
             id: "c1-first-line", kind: .campaign, title: "First Line", feature: "Lines and trains",
             briefing: "A quiet town needs its first metro. Drag between stations to build lines; each new line takes a spare train. Only the three basic shapes appear.",
             preset: MapPreset(id: "c1", name: "Millbrook", archetype: .lakes, seed: 4_211),
-            weekLimit: 2, objectives: [.deliver(45), .connectedStations(12), .deliver(85)]
+            weekLimit: 2, objectives: [.deliver(45), .connectedStations(10), .deliver(70)]
         ) { c in
             c.rareShapes = []
             c.specialStationChance = 0
@@ -55,7 +55,7 @@ public enum CampaignManager {
             id: "c2-river", kind: .campaign, title: "Across the River", feature: "Tunnels",
             briefing: "The city sits on both banks. A line can only cross the water through a tunnel: you have three, and the depot sells more.",
             preset: MapPreset(id: "c2", name: "Riverside", archetype: .river, seed: 1_107),
-            weekLimit: 3, objectives: [.deliver(150), .connectedStations(20), .efficiency(87)]
+            weekLimit: 3, objectives: [.deliver(150), .connectedStations(16), .efficiency(80)]
         ) { c in
             c.rareShapes = []
             c.specialStationChance = 0
@@ -69,7 +69,7 @@ public enum CampaignManager {
             id: "c3-platforms", kind: .campaign, title: "Busy Platforms", feature: "Carriages and expansions",
             briefing: "Crowds build up fast here. Couple carriages to busy trains and expand the stations that fill up. Keep every station calm for the extra star.",
             preset: MapPreset(id: "c3", name: "Lakeland", archetype: .lakes, seed: 3_779),
-            weekLimit: 4, objectives: [.deliver(230), .calmStations, .deliver(400)]
+            weekLimit: 4, objectives: [.deliver(230), .calmStations, .deliver(340)]
         ) { c in
             c.rareShapes = []
             c.specialStationChance = 0
@@ -83,7 +83,7 @@ public enum CampaignManager {
             id: "c4-shapes", kind: .campaign, title: "New Shapes", feature: "Rare stations and fast motors",
             briefing: "Diamonds, stars and hexagons appear early. Passengers for them travel far: fit fast motors to the trains that carry them.",
             preset: MapPreset(id: "c4", name: "Westhaven", archetype: .coastal, seed: 5_903),
-            weekLimit: 4, objectives: [.deliver(220), .connectedStations(21), .score(5_200)]
+            weekLimit: 4, objectives: [.deliver(220), .connectedStations(16), .score(4_300)]
         ) { c in
             c.rareShapesAfterStations = 4
             c.rareShapeChance = 0.25
@@ -97,7 +97,7 @@ public enum CampaignManager {
             id: "c5-rush", kind: .campaign, title: "Rush Hour", feature: "Rush hours",
             briefing: "Commuters! Twice a week the outskirts (mornings) or the centre (evenings) explode with passengers. The depot tells you which days.",
             preset: MapPreset(id: "c5", name: "Harbour Bay", archetype: .coastal, seed: 2_311),
-            weekLimit: 4, objectives: [.deliver(260), .rushDeliveries(150), .efficiency(83)]
+            weekLimit: 4, objectives: [.deliver(260), .rushDeliveries(120), .efficiency(78)]
         ) { c in
             c.specialStationChance = 0
             c.rushHoursFromWeek = 1
@@ -108,7 +108,7 @@ public enum CampaignManager {
             id: "c6-transfers", kind: .campaign, title: "Changing Trains", feature: "Special stations and express",
             briefing: "Hubs, interchanges, heritage and grand stations appear. Express lines skip ordinary stops. Can you keep it to four lines?",
             preset: MapPreset(id: "c6", name: "Twin Lakes", archetype: .lakes, seed: 6_421),
-            weekLimit: 5, objectives: [.deliver(380), .maxLines(4), .efficiency(80)]
+            weekLimit: 5, objectives: [.deliver(380), .maxLines(4), .efficiency(76)]
         ) { c in
             c.specialStationsAfter = 4
             c.specialStationChance = 0.4
@@ -128,7 +128,7 @@ public enum CampaignManager {
             id: "c8-metropolis", kind: .campaign, title: "Metropolis", feature: "Everything, on Hard",
             briefing: "A big, demanding city with every mechanic switched on and a Hard budget. Plan for growth.",
             preset: MapPreset(id: "c8", name: "Grand Central", archetype: .river, seed: 8_888),
-            weekLimit: 6, objectives: [.deliver(400), .connectedStations(26), .efficiency(72)], base: .hard
+            weekLimit: 6, objectives: [.deliver(400), .connectedStations(24), .efficiency(72)], base: .hard
         ),
     ]
 

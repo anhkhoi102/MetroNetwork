@@ -16,7 +16,7 @@ Date: 2026-11-17. Build: Debug and Release, macOS 14+ and iOS 17+ (one multiplat
 | Modes | Difficulty differences and ordering, scenarios, time limits, objectives, stars, unlocks |
 | Save and load (Phase 7) | Phase 5 progress files still load; damaged files are rejected cleanly; a game saved mid rush hour, event and express resumes identically |
 | Long runs (Phase 7) | 30 weeks on Easy, Normal and Hard with the auto player; every invariant checked every simulated second (passengers and every item conserved, tunnels within budget, trains on real stations with finite positions, timers in range, one event at a time) |
-| Balance | Auto player survives week 4+ on 6 maps; Easy 7.2 > Normal 4.6 > Hard 3.1 weeks; scenario report |
+| Balance | Auto player survives week 4+ on 6 maps; Easy 7.2 > Normal 4.6 > Hard 3.1 weeks; scenario report (the auto player earns 2★ or more on levels 1–6); every "stations on lines" target leaves at least two stations of slack |
 | Performance | Full city (45 stations, 7 lines, 28 trains, express, rush hours, events): **0.03 ms per simulation step** in Release (one 120 Hz frame is 8.3 ms) |
 
 ## Profiling and optimisation
