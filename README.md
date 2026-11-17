@@ -37,7 +37,7 @@ New to the game? Read [How to play](#how-to-play) · [Cách chơi](#cách-chơi-
 4. Optional: check the download against the `.sha256` file published with the release:
 
    ```bash
-   shasum -a 256 MetroNetwork-1.0.0-macOS.zip
+   shasum -a 256 MetroNetwork-*-macOS.zip
    ```
 
 Your progress is saved on your Mac only (see [Saving](#saving)). To uninstall, delete the app; to also remove
