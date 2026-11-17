@@ -28,7 +28,7 @@ CORE_SOURCES = [os.path.join(CORE, p) for p in [
     "Model/MapDefinition.swift"]]
 SOURCES = APP_SOURCES + CORE_SOURCES
 # Lines whose strings are not for the player.
-SKIP_LINE = re.compile(r"forResource|withExtension|appendingPathComponent|hasPrefix|forKey|"
+SKIP_LINE = re.compile(r"forResource|withExtension|appendingPathComponent|hasPrefix|forKey|forInfoDictionaryKey|"
                        r"fontNamed|environment\[|MapPreset\(id:|case \.\w+: \"[a-z]|"
                        r"assertionFailure|fatalError|\.named\(|ThemePalette\(|accessibilityIdentifier|rawValue|"
                        r"\"[A-Z]{2}\"|ImageResource|Image\(\"")

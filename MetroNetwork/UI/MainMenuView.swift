@@ -75,6 +75,13 @@ struct MainMenuView: View {
             LanguageSwitch()
                 .padding(UITheme.isCompact ? 12 : 20)
         }
+        .overlay(alignment: .bottomTrailing) {
+            Text(tr("Version \(AppVersion.display)"))
+                .font(UITheme.font(.caption))
+                .foregroundStyle(UITheme.secondaryInk)
+                .padding(UITheme.isCompact ? 10 : 16)
+                .accessibilityAddTraits(.isStaticText)
+        }
         .onAppear {
             withAnimation(.spring(response: 0.55, dampingFraction: 0.85).delay(0.05)) { appeared = true }
             AudioManager.shared.setMusicIntensity(0)
@@ -244,5 +251,22 @@ struct LanguageSwitch: View {
         .padding(3)
         .background(.regularMaterial, in: Capsule())
         .overlay(Capsule().strokeBorder(.black.opacity(0.06)))
+    }
+}
+
+/// The app's version from its bundle ("1.0.1", or "1.0.1 (2)" in debug builds where the build number helps).
+enum AppVersion {
+    static var marketing: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
+    }
+    static var build: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "?"
+    }
+    static var display: String {
+        #if DEBUG
+        "\(marketing) (\(build))"
+        #else
+        marketing
+        #endif
     }
 }
