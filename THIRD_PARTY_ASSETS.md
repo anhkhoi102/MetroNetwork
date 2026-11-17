@@ -1,5 +1,7 @@
 # Third-party assets
 
+These assets keep their own licenses and are not covered by the MIT License in `LICENSE`, which applies to the source code.
+
 Everything else in the game (map, stations, lines, trains, passenger glyphs, menu art, app icon) is original
 vector art drawn in code. No assets come from Mini Metro or any other commercial game, and none were made
 with an image-generation model.
