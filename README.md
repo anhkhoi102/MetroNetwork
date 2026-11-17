@@ -131,3 +131,12 @@ Docs/                 architecture and phase status
 Progress (`progress.json`) and the game in progress (`session.json`) are stored in Application Support/Metro Network
 (inside the app's sandbox container on macOS). The game in progress is saved every 20 s, at each new week, when the app
 goes to the background and when you leave to the menu; **Continue** on the menu resumes it.
+
+## License
+
+The source code is released under the [MIT License](LICENSE). Bundled third-party assets keep their own
+licenses: the Outfit font (SIL Open Font License 1.1) and Kenney textures and sounds (CC0); see
+[THIRD_PARTY_ASSETS.md](THIRD_PARTY_ASSETS.md).
+
+Mã nguồn được phát hành theo giấy phép MIT: bạn có thể dùng, sửa và phân phối lại, miễn giữ thông báo bản
+quyền. Phông chữ và âm thanh/hình ảnh bên thứ ba theo giấy phép riêng (OFL, CC0).
