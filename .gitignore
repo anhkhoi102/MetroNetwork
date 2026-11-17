@@ -1,0 +1,15 @@
+# Build output
+build/
+DerivedData/
+.build/
+.swiftpm/
+
+# Xcode per-user state
+xcuserdata/
+*.xcuserstate
+
+.DS_Store
+
+# Release packaging
+dist/
+*.zip
