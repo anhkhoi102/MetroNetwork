@@ -112,7 +112,7 @@ Full results in [TEST_REPORT.md](TEST_REPORT.md). In short:
 - **Scenario rules in the core (`ScenarioManager`):**
   - Time limits end a level exactly at the end of its last week, before the next week's credits arrive.
   - Objectives that depend on history (calm stations, line count, rush deliveries) are tracked during play.
-  - Campaign levels fail when the network fails; challenges are scored however they end.
+  - Campaign levels pass once the first objective ("to pass") is met; if the network fails after that, the level still counts, scored at that moment (changed after a player report). A failure before it fails the level. Challenges are scored however they end.
 - **Saving:**
   - **Progress:** stars, medals, Endless bests per map and difficulty, totals and the default difficulty are kept in `progress.json` in Application Support, with atomic writes. The Phase 3 best scores are migrated.
   - **Game in progress:** saved to `session.json` every 20 s, at each new week, when the app goes to the background and when leaving to the menu. The menu shows **Continue**, which resumes paused exactly where it was (tested to continue identically). The save is cleared when the game ends.

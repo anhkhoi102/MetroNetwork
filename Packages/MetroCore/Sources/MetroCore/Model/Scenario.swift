@@ -50,9 +50,6 @@ public struct ScenarioState: Codable, Hashable, Sendable {
         self.weekLimit = weekLimit
         self.objectives = objectives
     }
-
-    /// Campaign levels are failed when the network fails; challenges are scored however they end.
-    public var failsOnGameOver: Bool { kind == .campaign }
 }
 
 /// How an objective stands right now.

@@ -74,13 +74,13 @@ public enum ScenarioManager {
         }
     }
 
-    /// Final rating. A campaign level passes when it reaches its time limit with the first objective met;
-    /// stars are the objectives met. A challenge is scored however it ends: medals are the objectives met.
+    /// Final rating. A campaign level passes when its first objective is met, as the objectives card promises
+    /// ("to pass"): if the network fails after that, the level still counts, scored at the moment it failed.
+    /// Stars are the objectives met. A challenge is scored however it ends: medals are the objectives met.
     public static func result(of state: GameState) -> ScenarioResult? {
         guard let scenario = state.scenario else { return nil }
         let objectives = progress(of: state)
-        let failed = scenario.failsOnGameOver && state.gameOver != nil
-        let passed = !failed && (objectives.first?.met ?? false)
+        let passed = objectives.first?.met ?? false
         let stars = passed ? objectives.filter(\.met).count : 0
         return ScenarioResult(id: scenario.id, kind: scenario.kind, passed: passed, stars: stars,
                               objectives: objectives, score: state.stats.score)

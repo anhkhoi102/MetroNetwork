@@ -40,6 +40,7 @@
  "%@/%@ waiting": "%1$@/%2$@ người chờ",
  "%@: a %@ station was overcrowded for too long.": "%1$@: một ga %2$@ bị quá tải quá lâu.",
  "%@: the first objective wasn't met in time.": "%@: chưa đạt mục tiêu đầu tiên kịp giờ.",
+ "%@: the network failed in week %@, but you had already met the goal to pass.": "%1$@: mạng lưới bị sập ở tuần %2$@, nhưng bạn đã đạt mục tiêu qua màn từ trước.",
  "+%@ credits": "+%@ xu",
  "+%@ room at one station before it overcrowds.": "+%@ chỗ cho một ga trước khi quá tải.",
  "+%@ seats on one train, but slower to speed up.": "+%@ chỗ cho một tàu, nhưng tăng tốc chậm hơn.",

@@ -152,6 +152,9 @@ struct ScenarioResultView: View {
     }
 
     private var subtitle: String {
+        if failedStation != nil, result.passed, !medals {
+            return tr("\(scenario.title): the network failed in week \(summary.week), but you had already met the goal to pass.")
+        }
         if let failedStation, !result.passed || medals {
             return tr("\(scenario.title): a \(failedStation.shape.displayName.lowercased()) station was overcrowded for too long.")
         }

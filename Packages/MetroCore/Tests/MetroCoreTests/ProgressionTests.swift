@@ -64,15 +64,33 @@ struct ScenarioTests {
         #expect(engine.state == frozen)
     }
 
-    @Test func campaignLevelsFailOnGameOverButChallengesAreStillScored() {
-        for (id, failsOnGameOver) in [("c2-river", true), ("x1-two-lines", false)] {
+    /// The pass objective is "to pass": once it is met, a later network failure doesn't take the level away
+    /// (a player reported failing Old Port on the last day with 553 of 260 passengers delivered).
+    @Test func networkFailureAfterThePassObjectiveStillPasses() {
+        for id in ["c7-disruptions", "x1-two-lines"] {
             var state = GameSessionManager.newSession(mode: .scenario(id))!.state
-            state.passengersDelivered = 10_000
-            state.stats.score = 100_000
-            state.status = .over(GameOverInfo(station: state.stations[0].id, time: 10))
+            state.passengersDelivered = 553
+            state.stats.score = 7_877
+            state.scenario?.tracking.peakOvercrowding = 1
+            state.status = .over(GameOverInfo(station: state.stations[0].id, time: 4.9 * state.config.weekLength))
             let r = ScenarioManager.result(of: state)!
-            #expect(r.passed == !failsOnGameOver, "\(id)")
+            #expect(r.passed, "\(id)")
+            if id == "c7-disruptions" {
+                #expect(r.stars == 2)                                  // deliver and score; calm stations lost
+                #expect(r.objectives[1].lost)
+            }
         }
+    }
+
+    /// Failing before the pass objective is met still fails the level.
+    @Test func networkFailureBeforeThePassObjectiveFails() {
+        var state = GameSessionManager.newSession(mode: .scenario("c7-disruptions"))!.state
+        state.passengersDelivered = 259
+        state.stats.score = 100_000
+        state.status = .over(GameOverInfo(station: state.stations[0].id, time: 10))
+        let r = ScenarioManager.result(of: state)!
+        #expect(!r.passed && r.stars == 0)
+        #expect(r.objectives[0].lost)
     }
 
     @Test func historyObjectives() {
