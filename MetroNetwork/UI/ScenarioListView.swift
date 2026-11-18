@@ -151,8 +151,7 @@ struct BriefingView: View {
             Panel {
                 HStack(alignment: .top, spacing: 16) {
                     if !UITheme.isCompact {
-                        MapPreview(map: MapGenerator.generate(archetype: scenario.preset.archetype, seed: scenario.preset.seed,
-                                                              name: scenario.preset.name))
+                        MapPreview(map: MapGenerator.generate(preset: scenario.preset))
                             .frame(width: 200, height: 150)
                             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                     }

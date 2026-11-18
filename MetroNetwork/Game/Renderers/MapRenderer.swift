@@ -16,6 +16,11 @@ enum MapRenderer {
         land.zPosition = 0
         root.addChild(land)
 
+        for hill in map.hills ?? [] {
+            let node = hillNode(hill)
+            node.zPosition = 0.5
+            root.addChild(node)
+        }
         root.addChild(streetGrid(size: map.size))
 
         // Decorative detail is seeded from the map, so a city always looks the same.
@@ -47,6 +52,22 @@ enum MapRenderer {
         root.addChild(ripples)
         root.addChild(outsideFrame(size: map.size))
         return root
+    }
+
+    /// A hill: stacked tinted discs (darker towards the top) with a thin contour line each.
+    private static func hillNode(_ hill: Hill) -> SKNode {
+        let node = SKNode()
+        node.position = CGPoint(hill.center)
+        for level in HillContours.levels(for: hill) {
+            let r = CGFloat(level.radius)
+            let disc = SKShapeNode(circleOfRadius: r)
+            disc.fillColor = VisualTheme.hill.sk.withAlphaComponent(0.15)
+            disc.strokeColor = VisualTheme.hillEdge.sk.withAlphaComponent(0.4)
+            disc.lineWidth = 1.5
+            disc.isAntialiased = true
+            node.addChild(disc)
+        }
+        return node
     }
 
     /// Covers everything past the map edge (rivers, coasts and district tints extend beyond it).

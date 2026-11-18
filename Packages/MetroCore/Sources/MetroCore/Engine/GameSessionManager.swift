@@ -6,12 +6,16 @@ public struct MapPreset: Identifiable, Hashable, Codable, Sendable {
     public var name: String
     public var archetype: MapArchetype
     public var seed: UInt64
+    /// Hill country (campaign part 2). Nil, not false, on flat maps, so presets saved before hills existed
+    /// compare equal to today's.
+    public var hilly: Bool?
 
-    public init(id: String, name: String, archetype: MapArchetype, seed: UInt64) {
+    public init(id: String, name: String, archetype: MapArchetype, seed: UInt64, hilly: Bool = false) {
         self.id = id
         self.name = name
         self.archetype = archetype
         self.seed = seed
+        self.hilly = hilly ? true : nil
     }
 
     /// Phase 1 sandbox maps.
@@ -58,7 +62,7 @@ public enum GameSessionManager {
     }
 
     public static func newSession(preset: MapPreset, config: GameConfiguration = .standard) -> GameEngine {
-        let map = MapGenerator.generate(archetype: preset.archetype, seed: preset.seed, name: preset.name)
+        let map = MapGenerator.generate(preset: preset)
         var spawnRNG = SeededRandom(seed: preset.seed ^ 0xA5A5_5A5A_1234_4321)
         let spawn = SpawnState(rng: spawnRNG.fork(), nextSpawnTime: 0)
         var state = GameState(config: config, map: map, spawn: spawn)

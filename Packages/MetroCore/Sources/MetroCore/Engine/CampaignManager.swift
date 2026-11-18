@@ -128,7 +128,7 @@ public enum CampaignManager {
             id: "c8-metropolis", kind: .campaign, title: "Metropolis", feature: "Everything, on Hard",
             briefing: "A big, demanding city with every mechanic switched on and a Hard budget. Plan for growth.",
             preset: MapPreset(id: "c8", name: "Grand Central", archetype: .river, seed: 8_888),
-            weekLimit: 6, objectives: [.deliver(300), .efficiency(72), .connectedStations(20)], base: .hard
+            weekLimit: 6, objectives: [.deliver(300), .score(4_600), .connectedStations(20)], base: .hard
         ),
         // Part 2: each level adds a new mechanic.
         ScenarioDefinition(
@@ -177,6 +177,40 @@ public enum CampaignManager {
             c.rushHoursFromWeek = 99
             c.eventsFromWeek = 99
         },
+        ScenarioDefinition(
+            id: "c13-hills", kind: .campaign, title: "Hill Country", feature: "Hills and slopes",
+            briefing: "A city built on hills. Trains slow right down climbing to a hilltop station, and hillside homes with a view are busy. Fast motors halve the climb.",
+            preset: MapPreset(id: "c13", name: "Highfield", archetype: .lakes, seed: 13_131, hilly: true),
+            weekLimit: 4, objectives: [.deliver(260), .efficiency(75), .score(4_850)]
+        ) { c in
+            c.rushHoursFromWeek = 3
+            c.eventsFromWeek = 99
+            c.startingMotors = 1
+        },
+        ScenarioDefinition(
+            id: "c14-megacity", kind: .campaign, title: "Megacity", feature: "Everything at once",
+            briefing: "The final city has it all: hills, a river with drawbridges, a stadium, an airport, new districts, rush hours and disruptions. Six weeks to build the network of your career.",
+            preset: MapPreset(id: "c14", name: "Meridian", archetype: .river, seed: 14_141, hilly: true),
+            weekLimit: 6, objectives: [.deliver(420), .fansDelivered(50), .score(7_000)]
+        ) { c in
+            var venues = VenueRules()
+            venues.stadiumAfterStations = 6
+            venues.airportAfterStations = 10
+            c.venues = venues
+            var bridges = BridgeRules()
+            bridges.fromWeek = 2
+            c.drawbridges = bridges
+            var districts = DistrictRules()
+            districts.fromWeek = 3
+            c.newDistricts = districts
+            c.rushHoursFromWeek = 3
+            c.eventsFromWeek = 5
+            c.passengerSpawnInterval = 14
+            c.stationSpawnInterval = 24
+            c.startingCredits = 4
+            c.weeklyCredits = 4
+            c.startingCrossings = 4
+        },
     ]
 
     public static func level(_ id: String) -> ScenarioDefinition? { levels.first { $0.id == id } }
@@ -211,7 +245,7 @@ public enum ChallengeManager {
             id: "x3-no-depot", kind: .challenge, title: "Closed Depot", feature: "No purchases",
             briefing: "The depot is shut. You get six trains, two carriages and five tunnels, and that's it.",
             preset: MapPreset(id: "x3", name: "Fixed Fleet", archetype: .river, seed: 9_333),
-            weekLimit: nil, objectives: [.score(3_500), .score(5_000), .score(6_000)]
+            weekLimit: nil, objectives: [.score(3_500), .score(5_000), .score(5_300)]
         ) { c in
             c.availablePurchases = []
             c.startingLocomotives = 6
@@ -233,7 +267,7 @@ public enum ChallengeManager {
             id: "x5-chaos", kind: .challenge, title: "Chaos Week", feature: "Events non-stop",
             briefing: "Something goes wrong every half minute from day one. Survive as long as you can.",
             preset: MapPreset(id: "x5", name: "Mayhem", archetype: .river, seed: 9_559),
-            weekLimit: nil, objectives: [.surviveWeeks(3), .surviveWeeks(4), .surviveWeeks(5)]
+            weekLimit: nil, objectives: [.surviveWeeks(2), .surviveWeeks(3), .surviveWeeks(4)]
         ) { c in
             c.eventsFromWeek = 1
             c.eventGapMin = 22

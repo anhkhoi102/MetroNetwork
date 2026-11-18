@@ -107,7 +107,7 @@ private struct MapCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Button(action: onPick) {
-                MapPreview(map: MapGenerator.generate(archetype: preset.archetype, seed: preset.seed, name: preset.name))
+                MapPreview(map: MapGenerator.generate(preset: preset))
                     .aspectRatio(1.6, contentMode: .fit)
                     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                     .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(.black.opacity(0.08)))
@@ -171,6 +171,13 @@ struct MapPreview: View {
                 return p
             }
             context.fill(Path(CGRect(origin: .zero, size: size)), with: .color(VisualTheme.land.color))
+            for hill in map.hills ?? [] {
+                for level in HillContours.levels(for: hill) {
+                    let c = pt(hill.center), r = level.radius * scale
+                    context.fill(Path(ellipseIn: CGRect(x: c.x - r, y: c.y - r, width: 2 * r, height: 2 * r)),
+                                 with: .color(VisualTheme.hill.color.opacity(0.35)))
+                }
+            }
             for park in map.parks { context.fill(path(park), with: .color(VisualTheme.park.color)) }
             for water in map.water {
                 context.fill(path(water), with: .color(VisualTheme.water.color))

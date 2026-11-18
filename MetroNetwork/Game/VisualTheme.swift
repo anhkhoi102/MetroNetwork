@@ -73,7 +73,16 @@ struct ThemePalette: Sendable {
         water: RGB(hex: 0x97B4C6), waterEdge: RGB(hex: 0x6F93AA), ripple: RGB(hex: 0xB7CCD9), shore: RGB(hex: 0xE0E8EC),
         stationFill: RGB(hex: 0xFFFFFF), stationStroke: RGB(hex: 0x22272D), ink: RGB(hex: 0x22272D))
 
-    static let all: [ThemePalette] = [.metropolitan, .coastal, .oldTown, .industrial]
+    /// Moss, heather and slate: the reward for finishing the campaign.
+    static let highland = ThemePalette(
+        id: "highland", name: "Highland",
+        lines: [0xC8443C, 0xD99A2B, 0x3A6EA5, 0x4E8A3E, 0x8B5FA8, 0xC75B85, 0x2F9488].map(RGB.init(hex:)),
+        outside: RGB(hex: 0xD9DBC9), land: RGB(hex: 0xEEF0E2), street: RGB(hex: 0xE0E3CF), block: RGB(hex: 0xE5E8D5),
+        blockEdge: RGB(hex: 0xD6DAC3), park: RGB(hex: 0xC9DDB4), parkEdge: RGB(hex: 0xAAC792), tree: RGB(hex: 0xA9C68F),
+        water: RGB(hex: 0x9DB8C9), waterEdge: RGB(hex: 0x7397AD), ripple: RGB(hex: 0xBFD2DE), shore: RGB(hex: 0xE3EAE6),
+        stationFill: RGB(hex: 0xFFFFFF), stationStroke: RGB(hex: 0x2B3328), ink: RGB(hex: 0x2B3328))
+
+    static let all: [ThemePalette] = [.metropolitan, .coastal, .oldTown, .industrial, .highland]
 
     static func named(_ id: String) -> ThemePalette { all.first { $0.id == id } ?? .metropolitan }
 }
@@ -117,6 +126,9 @@ enum VisualTheme {
     static var waterEdge: RGB { palette.waterEdge }
     static var ripple: RGB { palette.ripple }
     static var shore: RGB { palette.shore }
+    /// Hillsides: an earthy tint over the land, darker towards the top.
+    static var hill: RGB { palette.land.mixed(with: RGB(hex: 0xA8956A), 0.55) }
+    static var hillEdge: RGB { palette.land.mixed(with: RGB(hex: 0x8C7A52), 0.6) }
 
     // Stations
     static var stationFill: RGB { palette.stationFill }

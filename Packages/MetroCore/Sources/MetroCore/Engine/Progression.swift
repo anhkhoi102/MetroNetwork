@@ -158,6 +158,9 @@ public struct PlayerProgress: Codable, Hashable, Sendable {
         (MapPreset.builtIn[2], 3),
         (MapPreset(id: "twin-rivers", name: "Twin Rivers", archetype: .river, seed: 4_455), 6),
         (MapPreset(id: "old-port", name: "Old Port", archetype: .coastal, seed: 7_070), 7),
+        // Campaign part 2: hill country in Endless.
+        (MapPreset(id: "rolling-hills", name: "Rolling Hills", archetype: .lakes, seed: 15_151, hilly: true), 13),
+        (MapPreset(id: "summit", name: "Summit", archetype: .river, seed: 16_161, hilly: true), 14),
     ]
 
     /// Random cities unlock after this many campaign levels.
@@ -182,7 +185,8 @@ public struct PlayerProgress: Codable, Hashable, Sendable {
     public func isChallengeUnlocked(_ id: String) -> Bool { levelsPassed >= (Self.challengeUnlocks[id] ?? 0) }
 
     /// Visual themes unlock with campaign progress (ids match the app's theme palettes).
-    public static let themeUnlocks: [String: Int] = ["metropolitan": 0, "coastal": 2, "old-town": 4, "industrial": 6]
+    public static let themeUnlocks: [String: Int] = ["metropolitan": 0, "coastal": 2, "old-town": 4, "industrial": 6,
+                                                       "highland": 14]
 
     public func isThemeUnlocked(_ id: String) -> Bool { levelsPassed >= (Self.themeUnlocks[id] ?? 0) }
 }

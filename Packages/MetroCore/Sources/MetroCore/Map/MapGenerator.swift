@@ -26,6 +26,34 @@ public enum MapGenerator {
         return map
     }
 
+    /// The map of a preset, hills included.
+    public static func generate(preset: MapPreset) -> MapDefinition {
+        var map = generate(archetype: preset.archetype, seed: preset.seed, name: preset.name)
+        if preset.hilly == true { addHills(to: &map) }
+        return map
+    }
+
+    // MARK: Hills
+
+    /// Adds four to six hills in and around the city (the very centre stays flat), on land. Uses its own random stream, so
+    /// the rest of the map is the same as the flat version of the city.
+    public static func addHills(to map: inout MapDefinition) {
+        var rng = SeededRandom(seed: map.seed ^ 0x4111_5EED_0D06_1E5)
+        let count = rng.int(in: 4...6)
+        var hills: [Hill] = []
+        var attempts = 0
+        while hills.count < count, attempts < 400 {
+            attempts += 1
+            let angle = rng.double(in: 0...(2 * .pi))
+            let c = map.cityCenter + Vec2(cos(angle), sin(angle)) * rng.double(in: 200...750)
+            let radius = rng.double(in: 280...420)
+            guard map.bounds.contains(c), !map.isWater(c),
+                  hills.allSatisfy({ $0.center.distance(to: c) > ($0.radius + radius) * 0.75 }) else { continue }
+            hills.append(Hill(center: c, radius: radius, height: rng.double(in: 0.6...1)))
+        }
+        map.hills = hills
+    }
+
     // MARK: Water
 
     private static func riverWater(size: Vec2, center: Vec2, rng: inout SeededRandom) -> [Polygon] {

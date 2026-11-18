@@ -38,28 +38,33 @@ struct ObjectiveRow: View {
     let progress: ObjectiveProgress
     let medals: Bool
     var required = false
+    /// False on a failed campaign level: later objectives only count once the first one is met, so they are
+    /// shown as locked rather than ticked.
+    var counts = true
+
+    private var met: Bool { progress.met && counts }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
             HStack(spacing: 6) {
-                Image(systemName: progress.met ? "checkmark.circle.fill" : progress.lost ? "xmark.circle.fill"
-                      : (medals ? "medal" : "star"))
-                    .foregroundStyle(progress.met ? UITheme.lineColor(3) : progress.lost ? VisualTheme.danger.color
-                                     : UITheme.secondaryInk)
+                Image(systemName: !counts ? "lock.fill" : met ? "checkmark.circle.fill"
+                      : progress.lost ? "xmark.circle.fill" : (medals ? "medal" : "star"))
+                    .foregroundStyle(!counts ? UITheme.secondaryInk : met ? UITheme.lineColor(3)
+                                     : progress.lost ? VisualTheme.danger.color : UITheme.secondaryInk)
                 Text(ObjectiveText.describe(progress.objective) + (required ? tr(" (to pass)") : ""))
                     .font(UITheme.font(.subheadline, weight: .semibold))
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
                 Spacer(minLength: 6)
-                Text(ObjectiveText.value(progress))
+                Text(counts ? ObjectiveText.value(progress) : tr("Needs the first objective"))
                     .font(UITheme.font(.caption).monospacedDigit())
                     .foregroundStyle(UITheme.secondaryInk)
             }
-            if showsBar {
+            if showsBar && counts {
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
                         Capsule().fill(UITheme.ink.opacity(0.1))
-                        Capsule().fill(progress.met ? UITheme.lineColor(3) : UITheme.lineColor(2))
+                        Capsule().fill(met ? UITheme.lineColor(3) : UITheme.lineColor(2))
                             .frame(width: max(4, geo.size.width * min(1, progress.current / max(progress.target, 1))))
                     }
                 }
@@ -106,7 +111,8 @@ struct ScenarioResultView: View {
                     }
                     VStack(alignment: .leading, spacing: 6) {
                         ForEach(Array(result.objectives.enumerated()), id: \.offset) { i, p in
-                            ObjectiveRow(index: i, progress: p, medals: medals, required: i == 0 && !medals)
+                            ObjectiveRow(index: i, progress: p, medals: medals, required: i == 0 && !medals,
+                                         counts: medals || i == 0 || result.passed)
                         }
                     }
                     HStack(spacing: 16) {

@@ -11,7 +11,30 @@
 | 7 | Testing and optimisation | **Done** (2026-11-17): release candidate, see [TEST_REPORT.md](TEST_REPORT.md) |
 | Part 2, batch 1 | Campaign levels 9–10: stadium and airport | **Done** (2026-11-18), approved |
 | Part 2, batch 2 | Levels 11–12: drawbridge, new district | **Done** (2026-11-18), approved |
-| Part 2, batch 3 | Levels 13–14: hills (new map type), megacity finale, rewards | Planned |
+| Part 2, batch 3 | Levels 13–14: hills (new map type), megacity finale, rewards, star audit | **Done** (2026-11-18), approved |
+
+## Campaign part 2 — batch 3 (levels 13–14, rewards, star audit)
+
+- **Hills** (`Model/Hills.swift`): a property of the map (`MapDefinition.hills`, `MapPreset.hilly`), added by
+  `MapGenerator.addHills` with its own random stream, so the rest of a hilly city matches its flat version.
+  Four to six smooth hills within 200–750 of the centre. A train's top speed between two stations is divided
+  by 1 + 1.6 × the climb (a fast motor halves the 1.6); downhill and flat are unchanged. Station demand grows
+  by up to 30% with elevation. Drawn as tinted contour rings (map and previews); the station card says
+  when a station is on a hill.
+- **Level 13** *Hill Country* (Highfield, hilly lakes): pass 260 / 75% efficiency / 4,850 points.
+- **Level 14** *Megacity* (Meridian, hilly river; "Đại đô thị" in Vietnamese, because level 8 is already
+  "Siêu đô thị"): stadium, airport, drawbridges from week 2, new districts from week 3, rush hours from
+  week 3, events from week 5, six weeks. Pass 420 / 50 fans / 7,000 points.
+- **Rewards:** Endless cities *Rolling Hills* (after level 13) and *Summit* (after 14), both hilly; the
+  *Highland* theme after level 14.
+- **Star audit** (user request): `everyLevelCanBeFinishedWithEveryStar` plays every level and challenge
+  with 12 auto players and requires a three-star (gold) game for each, and no failed campaign game with a
+  later objective met. Changes it led to: Metropolis's second star is now 4,600 points (efficiency could be
+  met on a failed game); Hill Country 75% / 4,850; Closed Depot gold 5,300; Chaos Week 2 / 3 / 4 weeks.
+  On a failed level the result screen now shows later objectives as locked ("needs the first objective"),
+  never ticked.
+- `olderLevelsPlayExactlyAsBefore` pins the auto player's results on levels 1–8 and the challenges: an
+  accidental change to map generation altered them during this batch and was caught and reverted.
 
 ## Campaign part 2 — batch 2 (levels 11–12)
 

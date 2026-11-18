@@ -133,20 +133,17 @@ struct ScenarioBalanceTests {
         }
     }
 
-    /// Players found some three-star and gold targets out of reach, so every scenario's top objective is
-    /// checked against a range of auto players (quick and slow to react, normal and generous budgets).
-    /// Campaign levels: some auto player must actually meet it. Challenges are meant to be beaten by planning
-    /// better than the bot, so gold may sit a little above its best run, but no more than 20% (Chaos Week:
-    /// the best bot lasts about 4.2 of the 5 weeks gold asks for).
-    /// Release builds only (about 100 games): `swift test -c release --filter Balance`.
-    @Test(.enabled(if: isOptimizedBuild)) func topObjectivesAreWithinReach() {
+    /// Every level can be finished with every rating: for each campaign level and challenge, at least one
+    /// of twelve auto players (quick and slow to react, normal and generous budgets) earns all three stars
+    /// or the gold medal in a single game. And no campaign game ends with a later objective met while the
+    /// level is failed ("achieved it, but didn't pass"). Players asked for both.
+    /// Release builds only (about 230 games): `swift test -c release --filter Balance`.
+    @Test(.enabled(if: isOptimizedBuild)) func everyLevelCanBeFinishedWithEveryStar() {
         var report: [String] = []
         for s in CampaignManager.levels + ChallengeManager.challenges {
-            guard let top = s.objectives.last else { continue }
-            var best = 0.0
-            variants: for rich in [false, true] {
+            var counts = [0, 0, 0, 0]
+            for rich in [false, true] {
                 for think in [1.0, 2, 4, 6, 8, 12] {
-                    if best >= 1 { break variants }
                     let e = GameSessionManager.newSession(mode: .scenario(s.id)) { c in
                         if rich { c.startingCredits += 6; c.weeklyCredits += 2 }
                     }!
@@ -156,13 +153,16 @@ struct ScenarioBalanceTests {
                         player.act(on: e)
                         e.update(realDelta: e.state.config.simulationStep * 3)
                     }
-                    best = max(best, reach(top, in: e.state))
+                    let r = e.scenarioResult!
+                    counts[r.stars] += 1
+                    let orphan = s.kind == .campaign && !r.passed && r.objectives.dropFirst().contains { $0.met }
+                    #expect(!orphan, "\(s.id) (think \(think), rich \(rich)): a later objective met on a failed level")
                 }
             }
-            report.append("\(s.id) \(Int((best * 100).rounded()))%")
-            #expect(best >= (s.kind == .campaign ? 1 : 0.8), "\(s.id): best auto player reaches \(best) of \(top)")
+            report.append("\(s.id) \(counts)")
+            #expect(counts[3] > 0, "\(s.id): no auto player earned three stars (games by rating: \(counts))")
         }
-        print("Top objective, best auto player: " + report.joined(separator: ", "))
+        print("Games by rating 0/1/2/3: " + report.joined(separator: ", "))
     }
 }
 
@@ -175,14 +175,23 @@ let isOptimizedBuild: Bool = {
     #endif
 }()
 
-/// How far a finished game got towards an objective (1 = met).
-private func reach(_ objective: Objective, in state: GameState) -> Double {
-    let p = ScenarioManager.progress(of: state).first { $0.objective == objective }!
-    if p.met { return 1 }
-    switch objective {
-    case .calmStations, .maxLines: return 0
-    case .surviveWeeks(let n): return state.elapsed / (Double(n) * state.config.weekLength)
-    default: return p.current / max(p.target, 1)
+@Suite("Balance: older levels")
+struct OlderLevelTests {
+
+    /// New mechanics must leave the first eight levels and the challenges exactly as they were: these are the
+    /// default auto player's deliveries (an accidental change to map generation broke this once). Update a
+    /// number only when that level was rebalanced on purpose.
+    @Test func olderLevelsPlayExactlyAsBefore() {
+        let expected: [String: Int] = [
+            "c1-first-line": 74, "c2-river": 234, "c3-platforms": 353, "c4-shapes": 311, "c5-rush": 376,
+            "c6-transfers": 560, "c7-disruptions": 338, "c8-metropolis": 332,
+            "x1-two-lines": 4_367, "x2-commuters": 110, "x3-no-depot": 4_232, "x4-islands": 3_519, "x5-chaos": 4,
+        ]
+        for (id, value) in expected {
+            let e = autoPlay(mode: .scenario(id))
+            let actual = id.hasPrefix("x5") ? e.state.week - 1 : id.hasPrefix("x") && id != "x2-commuters"
+                ? e.state.stats.score : e.state.passengersDelivered
+            #expect(actual == value, "\(id): \(actual), was \(value)")
+        }
     }
 }
-

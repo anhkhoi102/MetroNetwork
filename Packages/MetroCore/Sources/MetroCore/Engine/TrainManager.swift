@@ -85,8 +85,12 @@ public enum TrainManager {
         var finished: [TrainID] = []
         // Looked up once per step instead of per train (stations never move; skipping only happens with an
         // express line or a closure, which are rare).
-        let lookup = MoveLookup(positions: state.stationPositions,
+        var lookup = MoveLookup(positions: state.stationPositions,
                                 anySkips: state.lines.contains(where: \.isExpress) || !state.events.isEmpty)
+        if state.map.hills?.isEmpty == false {
+            lookup.elevations = lookup.positions.mapValues { state.map.elevation(at: $0) }
+            lookup.hills = state.config.hillRules ?? HillRules()
+        }
         for index in state.trains.indices {
             switch state.trains[index].phase {
             case .dwelling(let remaining):
@@ -124,6 +128,9 @@ public enum TrainManager {
     private struct MoveLookup {
         let positions: [StationID: Vec2]
         let anySkips: Bool
+        /// Station elevations on a hilly map (empty on flat ones).
+        var elevations: [StationID: Double] = [:]
+        var hills = HillRules()
     }
 
     /// Accelerates towards cruising speed and brakes to stop exactly at the next station.
@@ -141,7 +148,12 @@ public enum TrainManager {
         // unless it has to turn round there.
         let passing = lookup.anySkips && runsThrough(train, in: state)
         let brakingLimit = passing ? Double.infinity : (2 * acceleration * remaining).squareRoot()
-        let speed = max(c.trainMinSpeed, min(train.maxSpeed(c), train.speed + acceleration * dt, brakingLimit))
+        var top = train.maxSpeed(c)
+        if !lookup.elevations.isEmpty {
+            top *= climbFactor(rise: (lookup.elevations[train.to] ?? 0) - (lookup.elevations[train.from] ?? 0),
+                               motor: train.hasMotor, rules: lookup.hills)
+        }
+        let speed = max(c.trainMinSpeed, min(top, train.speed + acceleration * dt, brakingLimit))
         train.speed = speed
         train.progress += speed * dt
         let arrived = train.progress >= length - 1e-6
@@ -151,6 +163,12 @@ public enum TrainManager {
         }
         state.trains[index] = train
         return arrived
+    }
+
+    /// Share of top speed left when climbing `rise` (0…1) between two stations; 1 on the flat or downhill.
+    public static func climbFactor(rise: Double, motor: Bool, rules: HillRules) -> Double {
+        guard rise > 0 else { return 1 }
+        return 1 / (1 + rules.climbPenalty * rise * (motor ? rules.motorClimbFactor : 1))
     }
 
     /// True when the train will run through its next station without stopping or turning round there.

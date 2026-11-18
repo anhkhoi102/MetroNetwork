@@ -74,6 +74,8 @@ public struct MapDefinition: Hashable, Codable, Sendable {
     public var water: [Polygon]
     public var parks: [Polygon]
     public var districts: [District]
+    /// Hill country (campaign part 2); nil on flat maps, and in maps saved before hills existed.
+    public var hills: [Hill]?
 
     public init(name: String, archetype: MapArchetype, seed: UInt64, size: Vec2, cityCenter: Vec2,
                 water: [Polygon], parks: [Polygon], districts: [District]) {

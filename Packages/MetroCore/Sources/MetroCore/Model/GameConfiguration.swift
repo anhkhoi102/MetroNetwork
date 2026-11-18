@@ -170,6 +170,8 @@ public struct GameConfiguration: Codable, Hashable, Sendable {
     /// Drawbridges and new districts (campaign part 2); nil everywhere else.
     public var drawbridges: BridgeRules?
     public var newDistricts: DistrictRules?
+    /// How hills slow trains and draw passengers; nil = the defaults (only matters on a hilly map).
+    public var hillRules: HillRules?
 
     // MARK: Demand patterns
 

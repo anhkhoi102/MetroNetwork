@@ -11,8 +11,8 @@ struct CityChangeTests {
     @Test func onlyTheirLevelsUseThem() {
         #expect(GameConfiguration.standard.drawbridges == nil && GameConfiguration.standard.newDistricts == nil)
         for s in CampaignManager.levels + ChallengeManager.challenges {
-            #expect((s.config.drawbridges != nil) == (s.id == "c11-drawbridge"), "\(s.id)")
-            #expect((s.config.newDistricts != nil) == (s.id == "c12-new-district"), "\(s.id)")
+            #expect((s.config.drawbridges != nil) == ["c11-drawbridge", "c14-megacity"].contains(s.id), "\(s.id)")
+            #expect((s.config.newDistricts != nil) == ["c12-new-district", "c14-megacity"].contains(s.id), "\(s.id)")
         }
         #expect(GameSessionManager.newSession(preset: MapPreset.builtIn[0]).state.newDistricts == nil)
     }

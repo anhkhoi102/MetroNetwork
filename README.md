@@ -9,11 +9,11 @@ tracking, no third-party code. **English and Vietnamese** (switch with **EN | VI
 |---|---|---|
 | ![Main menu on macOS](Docs/screenshots/menu-mac.png) | ![A coastal city on iPhone](Docs/screenshots/game-coastal.png) | ![The weekly depot in Vietnamese](Docs/screenshots/depot-vi.png) |
 
-- **Campaign:** 12 cities, each introducing one idea (tunnels, carriages, rush hours, express lines, events, a stadium, an airport, drawbridges, new districts…), with 3 stars per level.
-- **Endless:** how long can your network last? Easy, Normal or Hard, on 5 cities plus random ones.
+- **Campaign:** 14 cities, each introducing one idea (tunnels, carriages, rush hours, express lines, events, a stadium, an airport, drawbridges, new districts, hills…), with 3 stars per level.
+- **Endless:** how long can your network last? Easy, Normal or Hard, on 7 cities (two of them hilly) plus random ones.
 - **Challenges:** 5 fixed scenarios with one unusual rule each, for bronze, silver and gold.
 - Weekly depot (trains, carriages, lines, tunnels, station expansions, fast motors), rush hours, network events,
-  special stations, a live network-efficiency score, four map themes, sound effects and generated music.
+  special stations, a live network-efficiency score, five map themes, sound effects and generated music.
 
 New to the game? Read [How to play](#how-to-play) · [Cách chơi](#cách-chơi-tiếng-việt).
 
@@ -116,6 +116,9 @@ are for Normal difficulty.)
   The decks turn amber just before a lift and red while it lasts.
 - **New districts** (level 12): once a week a neighbourhood is announced and marked on the map; 25 s later four
   stations open there at once.
+- **Hills** (level 13, and the hilly Endless cities): drawn as contour rings. A train climbing to a hilltop runs up
+  to 2.6× slower (a fast motor halves that); hillside stations are up to 30% busier. Level 14, *Megacity*, has
+  everything at once.
 
 ### Tips
 
@@ -191,6 +194,9 @@ khách đông dần, còn tài nguyên thì có hạn. (Các con số dưới đ
   vàng ngay trước khi nâng và đỏ trong lúc nâng.
 - **Khu đô thị mới** (màn 12): mỗi tuần một khu phố được báo trước và đánh dấu trên bản đồ; 25 giây sau, bốn ga
   mở ở đó cùng lúc.
+- **Đồi** (màn 13 và các thành phố đồi ở chế độ Vô tận): vẽ bằng các vòng đồng mức. Tàu leo lên ga trên đỉnh đồi
+  chậm tới 2,6 lần (động cơ nhanh giảm một nửa); ga trên sườn đồi đông khách hơn tới 30%. Màn 14 *Đại đô thị* có
+  tất cả cùng lúc.
 
 ### Mẹo chơi tốt
 

@@ -70,6 +70,13 @@ extension StationCard {
             }
             .font(UITheme.font(.caption))
             .foregroundStyle(UITheme.secondaryInk)
+            let elevation = state.map.elevation(at: station.position)
+            if elevation > 0.3 {
+                Label(tr("On a hill (\(Int((elevation * 100).rounded()))%): busier, and trains climb slowly"),
+                      systemImage: "mountain.2.fill")
+                    .font(UITheme.font(.caption)).foregroundStyle(UITheme.secondaryInk)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
             if state.isClosed(station.id) {
                 Label("Closed: trains run through", systemImage: "xmark.octagon.fill")
                     .font(UITheme.font(.caption, weight: .bold)).foregroundStyle(VisualTheme.danger.color)

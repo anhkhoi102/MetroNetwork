@@ -26,6 +26,9 @@ public enum DemandManager {
         station.centrality = centrality
         station.demand = c.minStationDemand + (c.maxStationDemand - c.minStationDemand) * density
         station.attraction = 1 + (c.centralAttraction - 1) * centrality
+        if map.hills?.isEmpty == false {
+            station.demand *= 1 + (c.hillRules ?? HillRules()).hillDemandBonus * map.elevation(at: station.position)
+        }
 
         guard state.stations.count >= c.specialStationsAfter, state.spawn.rng.chance(c.specialStationChance) else { return }
         let allowed = SpecialStation.allCases.filter { kind in
