@@ -51,6 +51,9 @@ final class GameScene: SKScene {
         addChild(trainRenderer.layer)
         effects.layer.zPosition = 30
         addChild(effects.layer)
+        districtPreview.zPosition = 19
+        districtPreview.isHidden = true
+        addChild(districtPreview)
     }
 
     @available(*, unavailable)
@@ -114,6 +117,11 @@ final class GameScene: SKScene {
                     effects.passengersMoved(from: from, to: queueAnchor(to), count: count)
                 }
                 trainRenderer.bump(train)
+            case .bridgesRaised:
+                Feedback.play(.warning)
+            case .districtAnnounced:
+                controller?.showToast(tr("A new district opens soon: it's marked on the map"))
+                Feedback.play(.event)
             case .fullTime:
                 controller?.showToast(tr("Full time! The fans are leaving the stadium"))
                 Feedback.play(.event)
@@ -151,6 +159,7 @@ final class GameScene: SKScene {
         passengerRenderer.sync(engine.state.stations)
         stationRenderer.updateCongestion(engine.state.stations)
         stationRenderer.updateEvents(engine.state)
+        updateCityChanges(engine.state)
         trainRenderer.sync(state: engine.state, geometry: routeRenderer.geometry, dt: delta)
 
         // Autosave every 20 s of real time, so a crash loses little.
@@ -176,6 +185,19 @@ final class GameScene: SKScene {
     /// Where a station's waiting passengers are drawn (just right of the station).
     private func queueAnchor(_ station: Vec2) -> Vec2 {
         Vec2(station.x + Double(VisualTheme.stationRadius) + 10, station.y)
+    }
+
+    // MARK: Drawbridges and new districts
+
+    /// Dashed outline where an announced district will open.
+    private let districtPreview = DistrictPreviewNode()
+
+    private func updateCityChanges(_ state: GameState) {
+        if let lift = BridgeManager.lift(around: state.elapsed, in: state), let warning = state.config.drawbridges?.warning {
+            routeRenderer.setBridges(lift.isActive(at: state.elapsed) ? .up
+                                     : lift.start - state.elapsed <= warning ? .warning : .down)
+        }
+        districtPreview.show(state.newDistricts?.upcoming)
     }
 
     private func syncState(spawned: Set<StationID>) {

@@ -167,6 +167,9 @@ public struct GameConfiguration: Codable, Hashable, Sendable {
     public var heritageMaxLines = 2
     /// Stadium and airport (campaign part 2). Nil everywhere else, which also keeps older saves loading.
     public var venues: VenueRules?
+    /// Drawbridges and new districts (campaign part 2); nil everywhere else.
+    public var drawbridges: BridgeRules?
+    public var newDistricts: DistrictRules?
 
     // MARK: Demand patterns
 

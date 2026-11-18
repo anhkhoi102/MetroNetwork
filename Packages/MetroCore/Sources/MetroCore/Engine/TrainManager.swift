@@ -231,6 +231,10 @@ public enum TrainManager {
             state.trains[index].phase = .dwelling(remaining: 0)
             return
         }
+        if let until = BridgeManager.holdUntil(from: line.stations[i], to: line.stations[j], in: state) {
+            state.trains[index].phase = .dwelling(remaining: max(state.config.simulationStep, until - state.elapsed))
+            return
+        }
         let speed = state.trains[index].speed
         startTrip(index, from: line.stations[i], to: line.stations[j], in: &state)
         state.trains[index].speed = speed
@@ -273,6 +277,11 @@ public enum TrainManager {
         }
         guard let j = NetworkGraph.nextIndex(i, direction: direction, count: line.stations.count, loop: line.isLoop) else {
             state.trains[index].phase = .dwelling(remaining: state.config.dwellBase)
+            return false
+        }
+        // A drawbridge is up ahead: wait here (passengers can still board) until it comes down.
+        if let until = BridgeManager.holdUntil(from: stationID, to: line.stations[j], in: state) {
+            state.trains[index].phase = .dwelling(remaining: max(state.config.simulationStep, until - state.elapsed))
             return false
         }
         startTrip(index, from: stationID, to: line.stations[j], in: &state)

@@ -10,8 +10,23 @@
 | 6 | Visual and audio polish | **Done** (2026-11-17), plus Vietnamese (user request), approved (user started Phase 7) |
 | 7 | Testing and optimisation | **Done** (2026-11-17): release candidate, see [TEST_REPORT.md](TEST_REPORT.md) |
 | Part 2, batch 1 | Campaign levels 9–10: stadium and airport | **Done** (2026-11-18), approved |
-| Part 2, batch 2 | Levels 11–12: drawbridge, new district | Planned |
+| Part 2, batch 2 | Levels 11–12: drawbridge, new district | **Done** (2026-11-18), approved |
 | Part 2, batch 3 | Levels 13–14: hills (new map type), megacity finale, rewards | Planned |
+
+## Campaign part 2 — batch 2 (levels 11–12)
+
+- **Drawbridges** (`Model/Drawbridges.swift`, `Engine/BridgeManager.swift`, `GameConfiguration.drawbridges`).
+  A fixed timetable: from 25 s into the first week, every 40 s every bridge (a segment that has to cross
+  water) is up for 16 s. A train about to cross waits at the station before it (people can still board);
+  a train already on the bridge carries on. Decks turn amber 10 s before a lift and red during it; the HUD
+  counts down. Level 11 *Drawbridge* (Bridgewater, chosen because its river runs through the city: the auto
+  player needs three crossings): pass 240 / 74% efficiency / 4,400 points.
+- **New districts** (`DistrictManager`, `GameConfiguration.newDistricts`). From week 2, once a week: a mapped
+  neighbourhood with no stations, about a short line away from the network, is announced 25 s ahead (dashed
+  circle on the map, HUD countdown), then 4 stations open inside it. With none left it opens just beyond
+  the city's edge. Ordinary stations appear more slowly in this level (every 32 s). Level 12 *New District*
+  (Newbury Fields): pass 320 / 28 stations on lines / 7,000 points.
+- Both are off everywhere else, and their state is optional in saves, as in batch 1.
 
 ## Campaign part 2 — batch 1 (levels 9–10)
 

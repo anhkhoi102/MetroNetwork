@@ -65,6 +65,10 @@ public struct GameState: Codable, Hashable, Sendable {
     // MARK: Venues (campaign part 2)
     /// Stadium and airport bookkeeping; nil when the rules have no venues (and in older saves).
     public var venues: VenueState?
+    /// New districts announced and opened; nil when the rules have none (and in older saves).
+    public var newDistricts: DistrictState?
+    /// Whether the drawbridges were up at the last step (to announce lifts once); nil without drawbridges.
+    public var bridgesUp: Bool?
 
     public init(config: GameConfiguration, map: MapDefinition, spawn: SpawnState) {
         self.config = config
@@ -94,6 +98,7 @@ public struct GameState: Codable, Hashable, Sendable {
         self.efficiency = NetworkEfficiency()
         self.scenario = nil
         self.venues = config.venues == nil ? nil : VenueState()
+        self.newDistricts = config.newDistricts == nil ? nil : DistrictState()
     }
 
     /// The rush hour running now, if any.

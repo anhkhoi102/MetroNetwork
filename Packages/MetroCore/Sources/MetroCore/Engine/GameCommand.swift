@@ -169,4 +169,10 @@ public enum GameEvent: Hashable, Sendable {
     case fullTime(StationID)
     /// Airport travellers who waited too long left this station.
     case travellersGaveUp(StationID, count: Int)
+    /// Drawbridges went up (trains wait at the bank) or came down again.
+    case bridgesRaised
+    case bridgesLowered
+    /// A new district was announced (it opens at `opensAt`), or opened with its stations.
+    case districtAnnounced(NewDistrict)
+    case districtOpened(NewDistrict)
 }

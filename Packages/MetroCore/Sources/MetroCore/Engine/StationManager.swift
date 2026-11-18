@@ -102,6 +102,32 @@ public enum StationManager {
         return nil
     }
 
+    /// Adds a station inside a new district (beyond the city's current edge if need be).
+    @discardableResult
+    static func spawnStation(in state: inout GameState, near center: Vec2, radius: Double) -> StationID? {
+        let shape = chooseShape(in: &state)
+        var position: Vec2?
+        let spacing = state.config.stationMinSpacing
+        search: for factor in [1.0, 0.85, 0.7] {
+            for _ in 0..<60 {
+                let p = pointInDisc(center: center, radius: radius, rng: &state.spawn.rng)
+                guard state.map.isBuildable(p, clearance: state.config.stationWaterClearance),
+                      state.stations.allSatisfy({ $0.position.distance(to: p) >= spacing * factor }) else { continue }
+                position = p
+                break search
+            }
+        }
+        guard let position else { return nil }
+        let id = StationID(state.nextStationID)
+        state.nextStationID += 1
+        var station = Station(id: id, shape: shape, position: position, spawnTime: state.elapsed)
+        DemandManager.characterize(&station, in: &state)
+        state.stations.append(station)
+        PassengerManager.scheduleFirstPassenger(at: state.stations.count - 1, in: &state)
+        state.revision += 1
+        return id
+    }
+
     /// A spot that suits a venue: the airport as far from the centre as the city allows (a little beyond its
     /// current edge), the stadium out of the centre but not on the edge. Falls back to any valid spot.
     static func choosePosition(for venue: SpecialStation, in state: inout GameState) -> Vec2? {

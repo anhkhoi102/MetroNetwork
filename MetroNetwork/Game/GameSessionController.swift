@@ -304,6 +304,19 @@ final class GameSessionController {
                                      text: tr("Match \(dayNames[day]) · \(match.crowd) fans at full time"), tone: .info))
             }
         }
+        if let lift = BridgeManager.lift(around: now, in: state), let rules = state.config.drawbridges {
+            if lift.isActive(at: now) {
+                result.append(Notice(id: "bridges", icon: "ferry.fill",
+                                     text: tr("Bridges up · trains wait · \(Int((lift.end - now).rounded(.up)))s"), tone: .active))
+            } else if lift.start - now <= rules.warning {
+                result.append(Notice(id: "bridges", icon: "ferry",
+                                     text: tr("Bridges lift in \(Int((lift.start - now).rounded(.up)))s"), tone: .warning))
+            }
+        }
+        if let district = state.newDistricts?.upcoming {
+            result.append(Notice(id: "district", icon: "building.2.fill",
+                                 text: tr("New district in \(Int((district.opensAt - now).rounded(.up)))s"), tone: .warning))
+        }
         for event in state.events {
             let running = event.isActive(at: now)
             let seconds = Int(((running ? event.end : event.start) - now).rounded(.up))

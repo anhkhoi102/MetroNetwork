@@ -41,6 +41,8 @@ public struct SimulationEngine: Sendable {
         DifficultyManager.update(&state, events: &events)
         EventManager.update(&state, events: &events)
         StationManager.update(&state, events: &events)
+        DistrictManager.update(&state, events: &events)
+        BridgeManager.update(&state, events: &events)
         PassengerManager.update(&state, events: &events)
         VenueManager.update(&state, events: &events)
         TrainManager.update(&state, dt: dt, network: currentNetwork(for: state), events: &events)

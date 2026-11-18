@@ -29,7 +29,7 @@ struct ScenarioTests {
         let all = CampaignManager.levels + ChallengeManager.challenges
         #expect(Set(all.map(\.id)).count == all.count)
         #expect(Set(all.map(\.preset.id)).count == all.count)
-        #expect(CampaignManager.levels.count == 10 && ChallengeManager.challenges.count == 5)
+        #expect(CampaignManager.levels.count == 12 && ChallengeManager.challenges.count == 5)
         for s in all {
             #expect(s.objectives.count == 3, "\(s.id)")
             #expect(GameSessionManager.newSession(mode: .scenario(s.id))?.state.scenario?.id == s.id)

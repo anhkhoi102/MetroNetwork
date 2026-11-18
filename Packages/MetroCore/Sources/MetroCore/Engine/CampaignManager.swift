@@ -154,6 +154,29 @@ public enum CampaignManager {
             c.rushHoursFromWeek = 2
             c.eventsFromWeek = 99
         },
+        ScenarioDefinition(
+            id: "c11-drawbridge", kind: .campaign, title: "Drawbridge", feature: "Bridges that lift",
+            briefing: "Boats use this river all day. Every so often the bridges lift to let them through, and trains wait at the bank until they come down. The countdown shows when.",
+            preset: MapPreset(id: "c11", name: "Bridgewater", archetype: .river, seed: 11_305),
+            weekLimit: 4, objectives: [.deliver(240), .efficiency(74), .score(4_400)]
+        ) { c in
+            c.drawbridges = BridgeRules()
+            c.startingCrossings = 4
+            c.specialStationChance = 0
+            c.rushHoursFromWeek = 99
+            c.eventsFromWeek = 99
+        },
+        ScenarioDefinition(
+            id: "c12-new-district", kind: .campaign, title: "New District", feature: "Neighbourhoods that open at once",
+            briefing: "The city is building whole new neighbourhoods. Each week one is announced and shown on the map, then several stations open there at once. Have a line and trains ready.",
+            preset: MapPreset(id: "c12", name: "Newbury Fields", archetype: .lakes, seed: 12_121),
+            weekLimit: 5, objectives: [.deliver(320), .connectedStations(28), .score(7_000)]
+        ) { c in
+            c.newDistricts = DistrictRules()
+            c.stationSpawnInterval = 32
+            c.rushHoursFromWeek = 99
+            c.eventsFromWeek = 99
+        },
     ]
 
     public static func level(_ id: String) -> ScenarioDefinition? { levels.first { $0.id == id } }

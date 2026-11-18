@@ -9,7 +9,7 @@ tracking, no third-party code. **English and Vietnamese** (switch with **EN | VI
 |---|---|---|
 | ![Main menu on macOS](Docs/screenshots/menu-mac.png) | ![A coastal city on iPhone](Docs/screenshots/game-coastal.png) | ![The weekly depot in Vietnamese](Docs/screenshots/depot-vi.png) |
 
-- **Campaign:** 10 cities, each introducing one idea (tunnels, carriages, rush hours, express lines, events, a stadium, an airport…), with 3 stars per level.
+- **Campaign:** 12 cities, each introducing one idea (tunnels, carriages, rush hours, express lines, events, a stadium, an airport, drawbridges, new districts…), with 3 stars per level.
 - **Endless:** how long can your network last? Easy, Normal or Hard, on 5 cities plus random ones.
 - **Challenges:** 5 fixed scenarios with one unusual rule each, for bronze, silver and gold.
 - Weekly depot (trains, carriages, lines, tunnels, station expansions, fast motors), rush hours, network events,
@@ -112,6 +112,10 @@ are for Normal difficulty.)
   - **Express lines** stop only at line ends, interchanges and special stations.
 - **Venues** (campaign levels 9 and 10): at full time on Wednesdays and Saturdays a *stadium* sends 12 fans
   out at once; *airport* travellers give up after 45 s on a platform and earn +10 if they arrive within 60 s.
+- **Drawbridges** (level 11): every 40 s the bridges over the river lift for 16 s and trains wait at the bank.
+  The decks turn amber just before a lift and red while it lasts.
+- **New districts** (level 12): once a week a neighbourhood is announced and marked on the map; 25 s later four
+  stations open there at once.
 
 ### Tips
 
@@ -183,6 +187,10 @@ khách đông dần, còn tài nguyên thì có hạn. (Các con số dưới đ
   - **Tàu tốc hành** chỉ dừng ở hai đầu tuyến, ga trung chuyển và ga đặc biệt.
 - **Sân vận động và sân bay** (màn 9 và 10): mỗi thứ Tư và thứ Bảy, khi hết trận *sân vận động* thả 12 cổ động
   viên ra cùng lúc; du khách từ *sân bay* bỏ đi sau 45 giây chờ ở sân ga, và được +10 điểm nếu tới nơi trong 60 giây.
+- **Cầu cất** (màn 11): cứ 40 giây các cây cầu qua sông lại nâng lên 16 giây, tàu phải chờ ở bờ. Mặt cầu chuyển
+  vàng ngay trước khi nâng và đỏ trong lúc nâng.
+- **Khu đô thị mới** (màn 12): mỗi tuần một khu phố được báo trước và đánh dấu trên bản đồ; 25 giây sau, bốn ga
+  mở ở đó cùng lúc.
 
 ### Mẹo chơi tốt
 

@@ -13,6 +13,8 @@ final class RouteRenderer {
     private var drawnExpress: [LineID: Bool] = [:]
     private var selected: LineID?
     private var draftID: LineID?
+    /// Drawbridges: how the bridge decks are drawn right now.
+    private var bridgeState: BridgeState = .down
     private let metrics = VisualTheme.routeMetrics
     private let map: MapDefinition
 
@@ -57,10 +59,18 @@ final class RouteRenderer {
             drawnExpress[id] = nil
         }
         geometry = newGeometry
+        for node in nodes.values { node.setBridge(bridgeState) }
         applyEmphasis()
     }
 
     /// A brief glow along a newly built line.
+    /// Drawbridges: amber decks just before a lift, red while the bridges are up.
+    func setBridges(_ state: BridgeState) {
+        guard state != bridgeState else { return }
+        bridgeState = state
+        for node in nodes.values { node.setBridge(state) }
+    }
+
     func flash(_ id: LineID) {
         nodes[id]?.flash()
     }
@@ -92,6 +102,9 @@ private final class LineNode: SKNode {
     private let deck = SKShapeNode()
     /// Express lines: a thin white stripe down the middle.
     private let stripe = SKShapeNode()
+    /// Drawbridges: a boat badge in the middle of each bridge, shown while the bridges are up.
+    private let liftBadges = SKNode()
+    private var bridge: BridgeState = .down
 
     override init() {
         super.init()
@@ -114,10 +127,47 @@ private final class LineNode: SKNode {
         deck.strokeColor = VisualTheme.bridge.sk
         deckEdge.lineCap = .butt
         deck.lineCap = .butt
+        liftBadges.zPosition = 0.3
+        liftBadges.isHidden = true
+        addChild(liftBadges)
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) { fatalError("not used") }
+
+    func setBridge(_ state: BridgeState) {
+        bridge = state
+        liftBadges.isHidden = state != .up
+        switch state {
+        case .down:
+            deck.strokeColor = VisualTheme.bridge.sk
+            deckEdge.strokeColor = VisualTheme.bridgeEdge.sk
+        case .warning:
+            deck.strokeColor = VisualTheme.warning.mixed(with: VisualTheme.bridge, 0.45).sk
+            deckEdge.strokeColor = VisualTheme.warning.sk
+        case .up:
+            deck.strokeColor = VisualTheme.danger.mixed(with: VisualTheme.bridge, 0.35).sk
+            deckEdge.strokeColor = VisualTheme.danger.sk
+        }
+    }
+
+    /// White disc with a red boat, like a station badge.
+    private static func liftBadge() -> SKNode {
+        let node = SKNode()
+        let disc = SKShapeNode(circleOfRadius: 11)
+        disc.fillColor = .white
+        disc.strokeColor = VisualTheme.danger.sk
+        disc.lineWidth = 2.5
+        node.addChild(disc)
+        let texture = Textures.symbol("ferry.fill", color: VisualTheme.danger)
+        let icon = SKSpriteNode(texture: texture)
+        let size = texture.size()
+        let scale = 13 / max(size.width, size.height, 1)
+        icon.size = CGSize(width: size.width * scale, height: size.height * scale)
+        icon.zPosition = 0.1
+        node.addChild(icon)
+        return node
+    }
 
     func update(geometry: LineGeometry, color: RGB, metrics: RouteMetrics, map: MapDefinition, express: Bool) {
         let spans = geometry.segments.flatMap { RouteGeometry.waterSpans(of: $0.points, map: map) }
@@ -133,6 +183,13 @@ private final class LineNode: SKNode {
         }
         deck.path = bridges
         deckEdge.path = bridges
+        liftBadges.removeAllChildren()
+        for span in spans where span.count > 1 {
+            let mid = Vec2.lerp(span.first!, span.last!, 0.5)
+            let badge = Self.liftBadge()
+            badge.position = CGPoint(mid)
+            liftBadges.addChild(badge)
+        }
         deck.lineWidth = metrics.lineWidth + 8
         deckEdge.lineWidth = metrics.lineWidth + 12
 
@@ -198,4 +255,9 @@ private final class LineNode: SKNode {
         }
         return path
     }
+}
+
+/// How drawbridge decks are drawn.
+enum BridgeState: Equatable {
+    case down, warning, up
 }
