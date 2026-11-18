@@ -37,7 +37,7 @@ NEEDS_TR = (".help(", "confirmationDialog(", "showToast(", ".accessibilityLabel(
 # Literals that are ids, symbols or names, not text.
 IDENTIFIERS = {"Logo", "Outfit", "English", "Tiếng Việt", "EN", "VI", "Metro Network", "fit", "waiting", "trip", "load",
                "crowding", "map", "infinity", "gearshape", "xmark", "medal", "star", "rush", "clock",
-               "campaign", "challenges", "endless", "statistics", "settings"}
+               "campaign", "challenges", "endless", "statistics", "settings", "match"}
 # SF Symbol names passed as systemImage:/systemName: are not text.
 SYMBOL = re.compile(r"(systemImage|systemName|icon|systemImageName)\s*:\s*$")
 # City names stay as they are.

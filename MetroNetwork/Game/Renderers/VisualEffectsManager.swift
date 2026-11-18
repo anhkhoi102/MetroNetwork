@@ -59,6 +59,23 @@ final class VisualEffectsManager {
         }
     }
 
+    /// Airport travellers who gave up: a grey "−N" with a car, sinking away.
+    func travellersLeft(_ count: Int, position: Vec2) {
+        let label = SKLabelNode(fontNamed: AppFonts.boldFontName)
+        label.text = "−\(count) 🚕"
+        label.fontSize = 15 * max(1, min(2.2, cameraScale))
+        label.fontColor = VisualTheme.danger.darkened(0.15).sk
+        label.verticalAlignmentMode = .center
+        label.position = CGPoint(x: position.x, y: position.y - VisualTheme.stationRadius * 1.9)
+        layer.addChild(label)
+        let sink = SKAction.group([
+            .moveBy(x: 0, y: -22 * max(1, cameraScale), duration: 1.1),
+            .sequence([.wait(forDuration: 0.7), .fadeOut(withDuration: 0.4)]),
+        ])
+        sink.timingMode = .easeOut
+        label.run(.sequence([sink, .removeFromParent()]))
+    }
+
     private func showPoints(_ points: Int, at position: Vec2) {
         let label = SKLabelNode(fontNamed: AppFonts.boldFontName)
         label.text = "+\(points)"

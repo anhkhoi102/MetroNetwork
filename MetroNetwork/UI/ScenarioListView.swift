@@ -216,6 +216,8 @@ enum ObjectiveText {
         case .rushDeliveries(let n): tr("Deliver \(n) passengers during rush hours")
         case .maxLines(let n): tr("Never run more than \(n) lines")
         case .surviveWeeks(let n): tr("Keep the network running to the end of week \(n)")
+        case .fansDelivered(let n): tr("Deliver \(n) fans after matches")
+        case .travellersOnTime(let n): tr("Deliver \(n) airport travellers on time")
         }
     }
 

@@ -9,6 +9,30 @@
 | 5 | Campaign and Challenge modes | **Done** (2026-11-17), approved (user started Phase 6) |
 | 6 | Visual and audio polish | **Done** (2026-11-17), plus Vietnamese (user request), approved (user started Phase 7) |
 | 7 | Testing and optimisation | **Done** (2026-11-17): release candidate, see [TEST_REPORT.md](TEST_REPORT.md) |
+| Part 2, batch 1 | Campaign levels 9–10: stadium and airport | **Done** (2026-11-18), approved |
+| Part 2, batch 2 | Levels 11–12: drawbridge, new district | Planned |
+| Part 2, batch 3 | Levels 13–14: hills (new map type), megacity finale, rewards | Planned |
+
+## Campaign part 2 — batch 1 (levels 9–10)
+
+Six new levels are planned, each adding one mechanic; two per batch, approved one batch at a time.
+
+- **Venues** (`Model/Venues.swift`, `Engine/VenueManager.swift`), switched on per level by
+  `GameConfiguration.venues`. Off everywhere else: the first eight levels, the challenges and Endless play
+  exactly as before (the scenario report is unchanged).
+  - **Stadium** (level 9, *Match Day*): the 5th station. Quiet between matches (×0.5 demand), +16 room. Every
+    Wednesday and Saturday at full time, 12 fans leave over 12 s, heading anywhere. The HUD shows the next
+    match, then a 20 s countdown, then the crowd leaving; the stadium gets the event ring.
+  - **Airport** (level 10, *Airport*): the 6th station, placed beyond the edge of town. Busy (×2 demand),
+    +6 room. Its passengers are travellers: one who waits 45 s on a platform gives up and takes a taxi
+    (shown as "−N 🚕"); one delivered within 60 s of landing earns +10.
+- **New objectives:** fans delivered, travellers delivered on time.
+- **Passenger conservation** now reads: spawned = delivered + in the network + gave up.
+- **Saves:** every new field is optional, so sessions saved by 1.0.1 still load.
+- **Targets** (auto player, 12 variants): Match Day pass 220 / 36 fans / survive to the end of week 4 (only
+  with a bigger budget, so it needs preparing for matches); Airport pass 260 / 35 travellers on time /
+  6,400 points.
+- Also fixed: special-station descriptions on the station card weren't translated into Vietnamese.
 
 ## Phase 7 — testing and optimisation
 

@@ -29,7 +29,7 @@ public enum DemandManager {
 
         guard state.stations.count >= c.specialStationsAfter, state.spawn.rng.chance(c.specialStationChance) else { return }
         let allowed = SpecialStation.allCases.filter { kind in
-            state.stations.lazy.filter { $0.special == kind }.count < c.maxStationsPerSpecial
+            !kind.isVenue && state.stations.lazy.filter { $0.special == kind }.count < c.maxStationsPerSpecial
         }
         guard !allowed.isEmpty else { return }
         station.special = allowed[state.spawn.rng.int(in: 0...(allowed.count - 1))]
@@ -43,6 +43,10 @@ public enum DemandManager {
         if state.isClosed(station.id) { return 0 }
         var m = station.demand
         if station.special == .hub { m *= state.config.hubDemandMultiplier }
+        if let v = state.config.venues {
+            if station.special == .stadium { m *= v.stadiumDemandFactor }
+            if station.special == .airport { m *= v.airportDemandFactor }
+        }
         if let rush = state.activeRushHour { m *= rush.multiplier(centrality: station.centrality) }
         for event in state.activeEvents {
             if case .surge(let s) = event.kind, s == station.id { m *= state.config.surgeMultiplier }

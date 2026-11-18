@@ -39,7 +39,7 @@ private func run(_ state: inout GameState, seconds: Double) -> [(TrainID, Statio
 }
 
 private func conserved(_ state: GameState) -> Bool {
-    state.passengersSpawned == state.passengersDelivered + state.passengersInNetwork
+    state.passengersSpawned == state.passengersDelivered + state.passengersInNetwork + state.passengersGaveUp
 }
 
 @Suite("Trains")

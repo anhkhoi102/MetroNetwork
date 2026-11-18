@@ -39,6 +39,13 @@ public enum SpecialStation: String, Codable, CaseIterable, Sendable {
     case heritage
     /// Large concourse: lots of room, but it can't be expanded.
     case grand
+    /// Venue: quiet between matches, then a whole crowd of fans leaves at full time.
+    case stadium
+    /// Venue: busy, on the edge of town; its travellers give up if they wait too long.
+    case airport
+
+    /// Venues are placed by the level's rules, never handed out at random.
+    public var isVenue: Bool { self == .stadium || self == .airport }
 
     public var displayName: String {
         switch self {
@@ -46,6 +53,8 @@ public enum SpecialStation: String, Codable, CaseIterable, Sendable {
         case .interchange: "Interchange"
         case .heritage: "Heritage"
         case .grand: "Grand"
+        case .stadium: "Stadium"
+        case .airport: "Airport"
         }
     }
 }
@@ -97,6 +106,8 @@ public struct Station: Identifiable, Hashable, Codable, Sendable {
         switch special {
         case .hub, .interchange: base += config.specialBonusCapacity
         case .grand: base += config.grandStationCapacity
+        case .stadium: base += config.venues?.stadiumBonusCapacity ?? 0
+        case .airport: base += config.venues?.airportBonusCapacity ?? 0
         default: break
         }
         return base + expansions * config.expansionCapacity

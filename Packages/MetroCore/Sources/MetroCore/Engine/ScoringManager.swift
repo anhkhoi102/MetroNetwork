@@ -18,6 +18,7 @@ public enum ScoringManager {
         let journey = max(0, state.elapsed - passenger.spawnTime)
         state.passengersDelivered += 1
         let earned = points(forJourney: journey, config: state.config)
+            + VenueManager.recordDelivery(passenger, journey: journey, in: &state)
         state.stats.score += earned
         events.append(.pointsScored(station, earned))
         state.stats.deliveredThisWeek += 1

@@ -48,6 +48,10 @@ final class StationRenderer {
             case .maintenance: break
             }
         }
+        if let match = VenueManager.nextMatch(in: state), let warning = state.config.venues?.matchWarning {
+            if state.elapsed >= match.fullTime { status[match.stadium] = .surge }
+            else if match.fullTime - state.elapsed <= warning { status[match.stadium] = .warning }
+        }
         for (id, node) in nodes { node.setEventStatus(status[id] ?? .none) }
     }
 

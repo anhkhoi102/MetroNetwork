@@ -114,6 +114,11 @@ final class GameScene: SKScene {
                     effects.passengersMoved(from: from, to: queueAnchor(to), count: count)
                 }
                 trainRenderer.bump(train)
+            case .fullTime:
+                controller?.showToast(tr("Full time! The fans are leaving the stadium"))
+                Feedback.play(.event)
+            case let .travellersGaveUp(station, count):
+                if let p = engine.state.station(station)?.position { effects.travellersLeft(count, position: p) }
             case let .pointsScored(station, points):
                 if let p = engine.state.station(station)?.position { effects.pointsScored(points, at: station, position: p) }
             case .scenarioFinished:

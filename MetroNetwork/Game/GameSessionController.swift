@@ -290,6 +290,20 @@ final class GameSessionController {
                                  text: tr("Rush hour \(dayNames[day]) · \(next.flow == .toCentre ? "morning" : "evening")"),
                                  tone: .info))
         }
+        if let match = VenueManager.nextMatch(in: state), let rules = state.config.venues {
+            if now >= match.fullTime {
+                result.append(Notice(id: "match", icon: "sportscourt.fill",
+                                     text: tr("Fans leaving the stadium · \(match.crowd - match.released)"), tone: .active))
+            } else if match.fullTime - now <= rules.matchWarning {
+                result.append(Notice(id: "match", icon: "sportscourt.fill",
+                                     text: tr("Full time in \(Int((match.fullTime - now).rounded(.up)))s · \(match.crowd) fans"),
+                                     tone: .warning))
+            } else {
+                let day = Int((match.fullTime / (state.config.weekLength / 7)).rounded(.down)) % 7
+                result.append(Notice(id: "match", icon: "sportscourt",
+                                     text: tr("Match \(dayNames[day]) · \(match.crowd) fans at full time"), tone: .info))
+            }
+        }
         for event in state.events {
             let running = event.isActive(at: now)
             let seconds = Int(((running ? event.end : event.start) - now).rounded(.up))

@@ -9,7 +9,7 @@ tracking, no third-party code. **English and Vietnamese** (switch with **EN | VI
 |---|---|---|
 | ![Main menu on macOS](Docs/screenshots/menu-mac.png) | ![A coastal city on iPhone](Docs/screenshots/game-coastal.png) | ![The weekly depot in Vietnamese](Docs/screenshots/depot-vi.png) |
 
-- **Campaign:** 8 cities, each introducing one idea (tunnels, carriages, rush hours, express lines, events…), with 3 stars per level.
+- **Campaign:** 10 cities, each introducing one idea (tunnels, carriages, rush hours, express lines, events, a stadium, an airport…), with 3 stars per level.
 - **Endless:** how long can your network last? Easy, Normal or Hard, on 5 cities plus random ones.
 - **Challenges:** 5 fixed scenarios with one unusual rule each, for bronze, silver and gold.
 - Weekly depot (trains, carriages, lines, tunnels, station expansions, fast motors), rush hours, network events,
@@ -110,6 +110,8 @@ are for Normal difficulty.)
   - **Special stations:** a *hub* has many passengers, an *interchange* makes changing trains fast, a
     *heritage* station allows at most 2 lines, a *grand* station is roomy but can't be expanded.
   - **Express lines** stop only at line ends, interchanges and special stations.
+- **Venues** (campaign levels 9 and 10): at full time on Wednesdays and Saturdays a *stadium* sends 12 fans
+  out at once; *airport* travellers give up after 45 s on a platform and earn +10 if they arrive within 60 s.
 
 ### Tips
 
@@ -179,6 +181,8 @@ khách đông dần, còn tài nguyên thì có hạn. (Các con số dưới đ
   - **Ga đặc biệt:** *ga đầu mối* rất đông khách, *ga trung chuyển* đổi tàu rất nhanh, *ga di sản* tối đa 2 tuyến,
     *ga lớn* rất rộng nhưng không mở rộng được.
   - **Tàu tốc hành** chỉ dừng ở hai đầu tuyến, ga trung chuyển và ga đặc biệt.
+- **Sân vận động và sân bay** (màn 9 và 10): mỗi thứ Tư và thứ Bảy, khi hết trận *sân vận động* thả 12 cổ động
+  viên ra cùng lúc; du khách từ *sân bay* bỏ đi sau 45 giây chờ ở sân ga, và được +10 điểm nếu tới nơi trong 60 giây.
 
 ### Mẹo chơi tốt
 

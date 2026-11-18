@@ -92,7 +92,7 @@ struct MainMenuView: View {
     private var campaign: some View {
         let stars = progress.campaignStars
         let total = CampaignManager.levels.count * 3
-        return MenuButton(title: "Campaign", subtitle: stars == 0 ? "8 cities, one idea each" : tr("\(stars)/\(total) stars"),
+        return MenuButton(title: "Campaign", subtitle: stars == 0 ? tr("\(CampaignManager.levels.count) cities, one idea each") : tr("\(stars)/\(total) stars"),
                           icon: "map", color: UITheme.lineColor(0), action: onCampaign)
     }
 

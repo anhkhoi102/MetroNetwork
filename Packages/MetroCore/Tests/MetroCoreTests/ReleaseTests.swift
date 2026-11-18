@@ -174,7 +174,7 @@ struct SoakTests {
 /// Everything that must always be true about a game state.
 func invariantProblems(_ s: GameState, start: ResourceStock, bought: [Purchase: Int]) -> [String] {
     var p: [String] = []
-    if s.passengersSpawned != s.passengersDelivered + s.passengersInNetwork { p.append("passengers not conserved") }
+    if s.passengersSpawned != s.passengersDelivered + s.passengersInNetwork + s.passengersGaveUp { p.append("passengers not conserved") }
     if s.resources.locomotives + s.trains.count != start.locomotives + bought[.locomotive, default: 0] { p.append("trains") }
     let carriages = s.trains.reduce(0) { $0 + $1.carriages }
     if s.resources.carriages + carriages != start.carriages + bought[.carriage, default: 0] { p.append("carriages") }

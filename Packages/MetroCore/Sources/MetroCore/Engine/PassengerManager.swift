@@ -40,7 +40,7 @@ public enum PassengerManager {
     /// more popular) unless `destination` is given.
     @discardableResult
     static func spawnPassenger(at index: Int, in state: inout GameState, events: inout [GameEvent],
-                               destination: StationShape? = nil) -> Passenger? {
+                               destination: StationShape? = nil, kind: PassengerKind? = nil) -> Passenger? {
         let shape: StationShape
         if let destination {
             shape = destination
@@ -50,8 +50,10 @@ public enum PassengerManager {
                   let pick = state.passengerRNG.weightedIndex(options.map(\.1)) else { return nil }
             shape = options[pick].0
         }
+        // Everyone who starts at the airport has a plane behind them and somewhere to be.
+        let kind = kind ?? (state.stations[index].special == .airport ? .traveller : nil)
         let passenger = Passenger(id: state.nextPassengerID, destination: shape,
-                                  origin: state.stations[index].id, spawnTime: state.elapsed)
+                                  origin: state.stations[index].id, spawnTime: state.elapsed, kind: kind)
         state.nextPassengerID += 1
         state.passengersSpawned += 1
         state.stations[index].waiting.append(passenger)

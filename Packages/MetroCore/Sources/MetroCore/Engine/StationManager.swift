@@ -53,11 +53,13 @@ public enum StationManager {
     @discardableResult
     public static func spawnStation(in state: inout GameState) -> StationID? {
         let shape = chooseShape(in: &state)
-        guard let position = choosePosition(in: &state) else { return nil }
+        let venue = VenueManager.venueDue(in: state)
+        guard let position = venue.map({ choosePosition(for: $0, in: &state) }) ?? choosePosition(in: &state) else { return nil }
         let id = StationID(state.nextStationID)
         state.nextStationID += 1
         var station = Station(id: id, shape: shape, position: position, spawnTime: state.elapsed)
         DemandManager.characterize(&station, in: &state)
+        if let venue { VenueManager.open(venue, at: &station, in: &state) }
         state.stations.append(station)
         PassengerManager.scheduleFirstPassenger(at: state.stations.count - 1, in: &state)
         state.revision += 1
@@ -98,6 +100,26 @@ public enum StationManager {
             }
         }
         return nil
+    }
+
+    /// A spot that suits a venue: the airport as far from the centre as the city allows (a little beyond its
+    /// current edge), the stadium out of the centre but not on the edge. Falls back to any valid spot.
+    static func choosePosition(for venue: SpecialStation, in state: inout GameState) -> Vec2? {
+        let spacing = state.config.stationMinSpacing
+        let centre = state.map.cityCenter
+        let radius = state.cityRadius
+        let reach = venue == .airport ? radius * 1.25 : radius
+        let ideal = venue == .airport ? reach : radius * 0.6
+        var best: (Vec2, Double)?
+        for _ in 0..<60 {
+            let p = pointInDisc(center: centre, radius: reach, rng: &state.spawn.rng)
+            guard state.map.isBuildable(p, clearance: state.config.stationWaterClearance),
+                  state.map.bounds.contains(p),
+                  state.stations.allSatisfy({ $0.position.distanceSquared(to: p) >= spacing * spacing }) else { continue }
+            let miss = abs(p.distance(to: centre) - ideal)
+            if best == nil || miss < best!.1 { best = (p, miss) }
+        }
+        return best?.0 ?? choosePosition(in: &state)
     }
 
     private static func sampleCandidate(in state: inout GameState) -> Vec2 {

@@ -138,6 +138,8 @@ enum VisualTheme {
         case .interchange: RGB(hex: 0x2F80ED)
         case .heritage: RGB(hex: 0x8A5A44)
         case .grand: RGB(hex: 0x12A2A8)
+        case .stadium: RGB(hex: 0x2E9E4F)
+        case .airport: RGB(hex: 0x5B5FC7)
         }
     }
 
@@ -147,6 +149,8 @@ enum VisualTheme {
         case .interchange: "arrow.triangle.swap"
         case .heritage: "building.columns.fill"
         case .grand: "square.grid.2x2.fill"
+        case .stadium: "sportscourt.fill"
+        case .airport: "airplane"
         }
     }
 

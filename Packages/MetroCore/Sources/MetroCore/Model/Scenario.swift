@@ -18,6 +18,10 @@ public enum Objective: Codable, Hashable, Sendable {
     case maxLines(Int)
     /// Reach the end of this week without the network failing (for challenges without a time limit).
     case surviveWeeks(Int)
+    /// Deliver this many fans who left the stadium at full time.
+    case fansDelivered(Int)
+    /// Deliver this many airport travellers on time.
+    case travellersOnTime(Int)
 }
 
 public enum ScenarioKind: String, Codable, Sendable {

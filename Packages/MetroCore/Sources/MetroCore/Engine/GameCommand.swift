@@ -165,4 +165,8 @@ public enum GameEvent: Hashable, Sendable {
     case passengersAlighted(TrainID, StationID, count: Int)
     /// Points earned by a delivery at a station.
     case pointsScored(StationID, Int)
+    /// Full time at the stadium: the crowd starts to leave.
+    case fullTime(StationID)
+    /// Airport travellers who waited too long left this station.
+    case travellersGaveUp(StationID, count: Int)
 }

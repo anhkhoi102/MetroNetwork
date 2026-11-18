@@ -57,7 +57,7 @@ extension StationCard {
             if let special = station.special {
                 Label {
                     Text(special.displayName).font(UITheme.font(.caption, weight: .bold))
-                    + Text(" · " + Self.describe(special, config)).font(UITheme.font(.caption))
+                    + Text(verbatim: " · " + Self.describe(special, config)).font(UITheme.font(.caption))
                 } icon: {
                     Image(systemName: VisualTheme.specialSymbol(special)).foregroundStyle(VisualTheme.specialColor(special).color)
                 }
@@ -79,17 +79,24 @@ extension StationCard {
 
     private var busyness: String {
         var demand = station.demand * (station.special == .hub ? config.hubDemandMultiplier : 1)
+        if let v = config.venues {
+            if station.special == .stadium { demand *= v.stadiumDemandFactor }
+            if station.special == .airport { demand *= v.airportDemandFactor }
+        }
         demand = (demand * 10).rounded() / 10
         return demand >= 1.5 ? tr("Very busy ×\(demand.formatted())") : demand >= 1.1 ? tr("Busy ×\(demand.formatted())")
             : demand <= 0.9 ? tr("Quiet ×\(demand.formatted())") : "Normal demand"
     }
 
     static func describe(_ special: SpecialStation, _ config: GameConfiguration) -> String {
-        switch special {
-        case .hub: "many more passengers, a little more room"
-        case .interchange: "changing trains here is much quicker"
-        case .heritage: "at most \(config.heritageMaxLines) lines may stop here"
-        case .grand: "lots of room, can't be expanded"
+        let v = config.venues ?? VenueRules()
+        return switch special {
+        case .hub: tr("Many more passengers, a little more room")
+        case .interchange: tr("Changing trains here is much quicker")
+        case .heritage: tr("At most \(config.heritageMaxLines) lines may stop here")
+        case .grand: tr("Lots of room, can't be expanded")
+        case .stadium: tr("Quiet between matches; at full time \(v.matchCrowd) fans leave at once")
+        case .airport: tr("Travellers give up after \(Int(v.travellerPatience)) s on a platform; delivered within \(Int(v.travellerOnTime)) s: +\(v.travellerBonus)")
         }
     }
 

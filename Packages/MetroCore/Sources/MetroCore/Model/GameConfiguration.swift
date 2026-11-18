@@ -165,6 +165,8 @@ public struct GameConfiguration: Codable, Hashable, Sendable {
     public var grandStationCapacity = 14
     /// Lines that may stop at a heritage station.
     public var heritageMaxLines = 2
+    /// Stadium and airport (campaign part 2). Nil everywhere else, which also keeps older saves loading.
+    public var venues: VenueRules?
 
     // MARK: Demand patterns
 

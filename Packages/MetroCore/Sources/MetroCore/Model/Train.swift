@@ -25,8 +25,10 @@ public struct Passenger: Identifiable, Hashable, Codable, Sendable {
     public var transfers: Int
     /// When they started waiting on the current platform.
     public var queuedSince: Double
+    /// Fan or traveller (campaign part 2); nil for everyone else.
+    public var kind: PassengerKind?
 
-    public init(id: Int, destination: StationShape, origin: StationID, spawnTime: Double) {
+    public init(id: Int, destination: StationShape, origin: StationID, spawnTime: Double, kind: PassengerKind? = nil) {
         self.id = id
         self.destination = destination
         self.origin = origin
@@ -34,6 +36,7 @@ public struct Passenger: Identifiable, Hashable, Codable, Sendable {
         self.waited = 0
         self.transfers = 0
         self.queuedSince = spawnTime
+        self.kind = kind
     }
 }
 

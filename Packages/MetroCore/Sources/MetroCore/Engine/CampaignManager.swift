@@ -130,6 +130,30 @@ public enum CampaignManager {
             preset: MapPreset(id: "c8", name: "Grand Central", archetype: .river, seed: 8_888),
             weekLimit: 6, objectives: [.deliver(300), .efficiency(72), .connectedStations(20)], base: .hard
         ),
+        // Part 2: each level adds a new mechanic.
+        ScenarioDefinition(
+            id: "c9-match-day", kind: .campaign, title: "Match Day", feature: "Stadium crowds",
+            briefing: "The city has a stadium, with a match every Wednesday and Saturday. At full time a whole crowd of fans pours out at once: have trains and room ready before the whistle.",
+            preset: MapPreset(id: "c9", name: "Kingsfield", archetype: .coastal, seed: 9_901),
+            weekLimit: 4, objectives: [.deliver(220), .fansDelivered(36), .surviveWeeks(4)]
+        ) { c in
+            c.venues = .stadium(after: 4)
+            c.startingCarriages = 2
+            c.startingCredits = 4
+            c.specialStationChance = 0
+            c.rushHoursFromWeek = 99
+            c.eventsFromWeek = 99
+        },
+        ScenarioDefinition(
+            id: "c10-airport", kind: .campaign, title: "Airport", feature: "Travellers in a hurry",
+            briefing: "An airport opens on the edge of town. Travellers who wait too long on a platform give up and take a taxi; get them there quickly for bonus points.",
+            preset: MapPreset(id: "c10", name: "Northgate", archetype: .lakes, seed: 10_303),
+            weekLimit: 4, objectives: [.deliver(260), .travellersOnTime(35), .score(6_400)]
+        ) { c in
+            c.venues = .airport(after: 5)
+            c.rushHoursFromWeek = 2
+            c.eventsFromWeek = 99
+        },
     ]
 
     public static func level(_ id: String) -> ScenarioDefinition? { levels.first { $0.id == id } }

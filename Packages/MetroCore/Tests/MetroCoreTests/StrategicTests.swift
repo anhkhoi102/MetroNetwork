@@ -250,7 +250,7 @@ struct DemandTests {
                 }
                 #expect(engine.state.events.count <= 1)
                 let st = engine.state
-                guard st.passengersSpawned == st.passengersDelivered + st.passengersInNetwork else {
+                guard st.passengersSpawned == st.passengersDelivered + st.passengersInNetwork + st.passengersGaveUp else {
                     Issue.record("seed \(seed) at \(st.elapsed): passengers not conserved with events running")
                     return
                 }

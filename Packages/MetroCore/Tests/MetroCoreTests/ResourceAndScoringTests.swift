@@ -345,7 +345,7 @@ struct ProgressionTests {
                         == start.expansions + bought[.expansion, default: 0],
                       ResourceManager.crossingsUsed(in: s) <= r.crossings,
                       s.lines.count <= r.lineSlots, r.credits >= 0,
-                      s.passengersSpawned == s.passengersDelivered + s.passengersInNetwork else {
+                      s.passengersSpawned == s.passengersDelivered + s.passengersInNetwork + s.passengersGaveUp else {
                     Issue.record("seed \(seed) frame \(frame): resources or passengers out of balance")
                     return
                 }

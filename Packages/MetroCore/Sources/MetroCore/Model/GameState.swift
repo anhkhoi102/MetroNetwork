@@ -62,6 +62,10 @@ public struct GameState: Codable, Hashable, Sendable {
     /// Set for campaign levels and challenges; nil in Endless.
     public var scenario: ScenarioState?
 
+    // MARK: Venues (campaign part 2)
+    /// Stadium and airport bookkeeping; nil when the rules have no venues (and in older saves).
+    public var venues: VenueState?
+
     public init(config: GameConfiguration, map: MapDefinition, spawn: SpawnState) {
         self.config = config
         self.map = map
@@ -89,6 +93,7 @@ public struct GameState: Codable, Hashable, Sendable {
         self.nextEventTime = Double(max(0, config.eventsFromWeek - 1)) * config.weekLength + config.eventGapMin * 0.5
         self.efficiency = NetworkEfficiency()
         self.scenario = nil
+        self.venues = config.venues == nil ? nil : VenueState()
     }
 
     /// The rush hour running now, if any.
@@ -150,6 +155,10 @@ public struct GameState: Codable, Hashable, Sendable {
     public func trains(on line: LineID) -> [Train] {
         trains.filter { $0.lineID == line }
     }
+
+    /// Passengers who gave up and left the network (airport travellers who waited too long).
+    /// Every passenger ever spawned is delivered, in the network, or here.
+    public var passengersGaveUp: Int { venues?.travellersGaveUp ?? 0 }
 
     /// Passengers waiting at stations plus passengers on trains.
     public var passengersInNetwork: Int {

@@ -53,6 +53,8 @@ public enum ScenarioManager {
         case .deliver(let n): return atLeast(Double(state.passengersDelivered), Double(n))
         case .score(let n): return atLeast(Double(state.stats.score), Double(n))
         case .rushDeliveries(let n): return atLeast(Double(t.rushDeliveries), Double(n))
+        case .fansDelivered(let n): return atLeast(Double(state.venues?.fansDelivered ?? 0), Double(n))
+        case .travellersOnTime(let n): return atLeast(Double(state.venues?.travellersOnTime ?? 0), Double(n))
         case .connectedStations(let n):
             let connected = Set(state.lines.flatMap(\.stations)).count
             return atLeast(Double(connected), Double(n))
