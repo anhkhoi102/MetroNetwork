@@ -132,4 +132,57 @@ struct ScenarioBalanceTests {
             }
         }
     }
+
+    /// Players found some three-star and gold targets out of reach, so every scenario's top objective is
+    /// checked against a range of auto players (quick and slow to react, normal and generous budgets).
+    /// Campaign levels: some auto player must actually meet it. Challenges are meant to be beaten by planning
+    /// better than the bot, so gold may sit a little above its best run, but no more than 20% (Chaos Week:
+    /// the best bot lasts about 4.2 of the 5 weeks gold asks for).
+    /// Release builds only (about 100 games): `swift test -c release --filter Balance`.
+    @Test(.enabled(if: isOptimizedBuild)) func topObjectivesAreWithinReach() {
+        var report: [String] = []
+        for s in CampaignManager.levels + ChallengeManager.challenges {
+            guard let top = s.objectives.last else { continue }
+            var best = 0.0
+            variants: for rich in [false, true] {
+                for think in [1.0, 2, 4, 6, 8, 12] {
+                    if best >= 1 { break variants }
+                    let e = GameSessionManager.newSession(mode: .scenario(s.id)) { c in
+                        if rich { c.startingCredits += 6; c.weeklyCredits += 2 }
+                    }!
+                    var player = AutoPlayer()
+                    player.thinkInterval = think
+                    while !e.state.isOver {
+                        player.act(on: e)
+                        e.update(realDelta: e.state.config.simulationStep * 3)
+                    }
+                    best = max(best, reach(top, in: e.state))
+                }
+            }
+            report.append("\(s.id) \(Int((best * 100).rounded()))%")
+            #expect(best >= (s.kind == .campaign ? 1 : 0.8), "\(s.id): best auto player reaches \(best) of \(top)")
+        }
+        print("Top objective, best auto player: " + report.joined(separator: ", "))
+    }
 }
+
+/// The slowest balance checks only run in optimised builds (they play about 100 complete games).
+let isOptimizedBuild: Bool = {
+    #if DEBUG
+    false
+    #else
+    true
+    #endif
+}()
+
+/// How far a finished game got towards an objective (1 = met).
+private func reach(_ objective: Objective, in state: GameState) -> Double {
+    let p = ScenarioManager.progress(of: state).first { $0.objective == objective }!
+    if p.met { return 1 }
+    switch objective {
+    case .calmStations, .maxLines: return 0
+    case .surviveWeeks(let n): return state.elapsed / (Double(n) * state.config.weekLength)
+    default: return p.current / max(p.target, 1)
+    }
+}
+

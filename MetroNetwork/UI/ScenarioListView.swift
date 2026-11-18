@@ -224,6 +224,7 @@ enum ObjectiveText {
         case .calmStations: p.lost ? "Broken" : p.met ? "Kept" : tr("Holding · worst \(Int((p.current * 100).rounded()))%")
         case .maxLines: p.lost ? "Broken" : p.met ? "Kept" : tr("Holding · \(Int(p.current)) lines")
         case .efficiency: "\(Int(p.current))% / \(Int(p.target))%"
+        case .surviveWeeks where p.lost: "Broken"                  // not "5 / 5" when it failed during week 5
         default: "\(Int(p.current)) / \(Int(p.target))"
         }
     }

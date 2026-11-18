@@ -116,9 +116,9 @@ public enum CampaignManager {
         },
         ScenarioDefinition(
             id: "c7-disruptions", kind: .campaign, title: "Disruptions", feature: "Network events",
-            briefing: "Closures, crowds, tour groups and train maintenance — each announced a few seconds ahead. Keep the stations calm through it all.",
+            briefing: "Closures, crowds, tour groups and train maintenance — each announced a few seconds ahead. Keep the network running through it all.",
             preset: MapPreset(id: "c7", name: "Old Port", archetype: .river, seed: 7_717),
-            weekLimit: 5, objectives: [.deliver(260), .calmStations, .score(5_200)]
+            weekLimit: 5, objectives: [.deliver(260), .surviveWeeks(5), .score(5_200)]
         ) { c in
             c.eventsFromWeek = 2
             c.eventGapMin = 40
@@ -128,7 +128,7 @@ public enum CampaignManager {
             id: "c8-metropolis", kind: .campaign, title: "Metropolis", feature: "Everything, on Hard",
             briefing: "A big, demanding city with every mechanic switched on and a Hard budget. Plan for growth.",
             preset: MapPreset(id: "c8", name: "Grand Central", archetype: .river, seed: 8_888),
-            weekLimit: 6, objectives: [.deliver(400), .connectedStations(24), .efficiency(72)], base: .hard
+            weekLimit: 6, objectives: [.deliver(300), .efficiency(72), .connectedStations(20)], base: .hard
         ),
     ]
 
@@ -144,7 +144,7 @@ public enum ChallengeManager {
             id: "x1-two-lines", kind: .challenge, title: "Two Lines Only", feature: "Line limit",
             briefing: "Two lines, never more. Survive as long as you can; medals for score.",
             preset: MapPreset(id: "x1", name: "Twofold", archetype: .lakes, seed: 9_102),
-            weekLimit: nil, objectives: [.score(4_000), .score(6_500), .score(9_000)]
+            weekLimit: nil, objectives: [.score(4_000), .score(6_000), .score(8_000)]
         ) { c in
             c.startingLineSlots = 2
             c.availablePurchases = Purchase.allCases.filter { $0 != .line }
@@ -153,7 +153,7 @@ public enum ChallengeManager {
             id: "x2-commuters", kind: .challenge, title: "Commuter Belt", feature: "Rush every weekday",
             briefing: "Four strong rush hours every week from the start. Six weeks; medals for passengers delivered.",
             preset: MapPreset(id: "x2", name: "Commuter Belt", archetype: .coastal, seed: 9_215),
-            weekLimit: 6, objectives: [.deliver(140), .deliver(220), .deliver(300)]
+            weekLimit: 6, objectives: [.deliver(100), .deliver(140), .deliver(180)]
         ) { c in
             c.rushHoursFromWeek = 1
             c.rushHoursPerWeek = 4
@@ -164,7 +164,7 @@ public enum ChallengeManager {
             id: "x3-no-depot", kind: .challenge, title: "Closed Depot", feature: "No purchases",
             briefing: "The depot is shut. You get six trains, two carriages and five tunnels, and that's it.",
             preset: MapPreset(id: "x3", name: "Fixed Fleet", archetype: .river, seed: 9_333),
-            weekLimit: nil, objectives: [.score(4_000), .score(6_500), .score(9_000)]
+            weekLimit: nil, objectives: [.score(3_500), .score(5_000), .score(6_000)]
         ) { c in
             c.availablePurchases = []
             c.startingLocomotives = 6
@@ -186,7 +186,7 @@ public enum ChallengeManager {
             id: "x5-chaos", kind: .challenge, title: "Chaos Week", feature: "Events non-stop",
             briefing: "Something goes wrong every half minute from day one. Survive as long as you can.",
             preset: MapPreset(id: "x5", name: "Mayhem", archetype: .river, seed: 9_559),
-            weekLimit: nil, objectives: [.surviveWeeks(4), .surviveWeeks(6), .surviveWeeks(8)]
+            weekLimit: nil, objectives: [.surviveWeeks(3), .surviveWeeks(4), .surviveWeeks(5)]
         ) { c in
             c.eventsFromWeek = 1
             c.eventGapMin = 22
